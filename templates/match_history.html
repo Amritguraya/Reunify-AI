@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}Match History | REUNIFY AI{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/operations.css', v='20261014-bg') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page operations-page">
+
+    <div class="page-header">
+
+        <div>
+
+            <div class="eyebrow">
+                AI AUDIT TRAIL
+            </div>
+
+            <h1 class="page-title">
+                Match History
+            </h1>
+
+            <div class="page-description">
+                Review AI-generated reunification candidates and verification status.
+            </div>
+
+        </div>
+
+        <a href="/ai_match" class="btn-main">
+            <i class="bi bi-cpu-fill"></i>
+            Run AI Matching
+        </a>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="records-heading d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h5 class="fw-bold mb-1">
+                    Matching Records
+                </h5>
+
+                <div class="text-secondary small">
+                    AI-generated candidate relationships
+                </div>
+
+            </div>
+
+            <span class="badge-status verified">
+                <i class="bi bi-database-check"></i>
+                DATABASE CONNECTED
+            </span>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table class="professional-table match-history-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Missing Child</th>
+                        <th>Found Child</th>
+                        <th>Face Similarity</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% if matches %}
+
+                        {% for match in matches %}
+
+                        <tr>
+
+                            <td>
+                                #{{ match.id }}
+                            </td>
+
+                            <td>
+                                {% if match.missing_id %}<a class="match-person-link" href="{{ url_for('view_missing.missing_child_detail', child_id=match.missing_id) }}">{% endif %}
+                                <div class="match-person">
+                                    <div class="match-person-photo">
+                                        {% if match.missing_photo %}
+                                            <img
+                                                src="{{ url_for('static', filename=match.missing_photo.replace('static/', '')) }}"
+                                                alt="Photo of {{ match.missing_name or 'missing child' }}"
+                                                loading="lazy"
+                                            >
+                                        {% else %}
+                                            <i class="bi bi-person-fill" aria-hidden="true"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="match-person-meta">
+                                        <strong>{{ match.missing_name or 'Missing child' }}</strong>
+                                        <span>Case #{{ match.missing_id or '—' }}</span>
+                                    </div>
+                                </div>
+                                {% if match.missing_id %}</a>{% endif %}
+                            </td>
+
+                            <td>
+                                {% if match.found_id %}<a class="match-person-link" href="{{ url_for('view_found.found_child_detail', child_id=match.found_id) }}">{% endif %}
+                                <div class="match-person">
+                                    <div class="match-person-photo">
+                                        {% if match.found_photo %}
+                                            <img
+                                                src="{{ url_for('static', filename=match.found_photo.replace('static/', '')) }}"
+                                                alt="Photo of found child case {{ match.found_id }}"
+                                                loading="lazy"
+                                            >
+                                        {% else %}
+                                            <i class="bi bi-person-check-fill" aria-hidden="true"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="match-person-meta">
+                                        <strong>Found child</strong>
+                                        <span>Case #{{ match.found_id or '—' }}</span>
+                                    </div>
+                                </div>
+                                {% if match.found_id %}</a>{% endif %}
+                            </td>
+
+                            <td>
+
+                                <strong>
+                                    {{ "%.2f"|format((match.confidence or 0) * 100) }}%
+                                </strong>
+                                {% if match.match_type == "cross_age" %}
+                                    <div class="text-warning small fw-semibold">
+                                        Cross-age · about {{ match.age_gap_years }} years
+                                    </div>
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+                                {{ match.match_date }}
+                            </td>
+
+                            <td>
+
+                                {% if match.verification_status == "Verified" %}
+
+                                    <span class="badge-status verified">
+                                        Verified
+                                    </span>
+
+                                {% elif match.verification_status == "Rejected" %}
+
+                                    <span class="badge-status rejected">
+                                        Rejected
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge-status pending">
+                                        Pending
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if match.verification_status == "Pending" %}
+
+                                <a
+                                    href="/verify-match/{{ match.id }}"
+                                    class="btn btn-sm btn-primary"
+                                >
+                                    Review
+                                </a>
+
+                                {% else %}
+
+                                <span class="text-secondary small">
+                                    Reviewed
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <tr>
+
+                            <td colspan="7" class="text-center py-5">
+
+                                <i
+                                    class="bi bi-search"
+                                    style="font-size:40px;color:#aab5c4;"
+                                ></i>
+
+                                <div class="fw-bold mt-3">
+                                    No matching records
+                                </div>
+
+                                <div class="text-secondary small mt-1">
+                                    Run AI matching to generate candidate relationships.
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% endif %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}{{ child["name"] }} · Missing Case | REUNIFY AI{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/operations.css', v='20261014-bg') }}">{% endblock %}
+{% block content %}
+<div class="page operations-page case-detail-page">
+    <header class="page-header">
+        <div>
+            <div class="eyebrow">MISSING CHILD CASE</div>
+            <h1 class="page-title">{{ child["name"] }}</h1>
+            <p class="page-description">Complete case information · Case #{{ child["id"] }}</p>
+        </div>
+        <a href="{{ url_for('view_missing.view_missing') }}" class="btn-main"><i class="bi bi-arrow-left"></i> All missing cases</a>
+    </header>
+
+    <section class="case-detail-card">
+        <div class="case-detail-overview">
+            <div class="case-detail-photo">
+                {% if child["photo_path"] %}
+                    <img src="{{ url_for('static', filename=child['photo_path'].replace('static/', '')) }}" alt="Photo of {{ child['name'] }}">
+                {% else %}
+                    <i class="bi bi-person-fill" aria-hidden="true"></i>
+                {% endif %}
+            </div>
+            <div class="case-detail-summary">
+                <span class="case-detail-kicker">IDENTIFICATION PROFILE</span>
+                <h2>{{ child["name"] }}</h2>
+                <p>This record contains the reported details used to identify and reunite this child with their family.</p>
+                <div class="case-detail-tags">
+                    <span><i class="bi bi-hash"></i> Case {{ child["id"] }}</span>
+                    <span><i class="bi bi-calendar-event"></i> Missing {{ child["missing_date"] or "date not provided" }}</span>
+                </div>
+            </div>
+            <span class="case-record-state"><i class="bi bi-shield-exclamation"></i> Missing child case</span>
+        </div>
+
+        <div class="case-detail-section">
+            <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-person-vcard"></i></span><div><h3>Child information</h3><p>Identity and last known location</p></div></div>
+            <div class="case-info-grid">
+                <div class="case-info-item"><span>Age</span><strong>{% if child["age"] is not none %}{{ child["age"] }} years{% else %}Not provided{% endif %}</strong></div>
+                <div class="case-info-item"><span>Gender</span><strong>{{ child["gender"] or "Not provided" }}</strong></div>
+                <div class="case-info-item"><span>City last seen</span><strong>{{ child["city"] or "Not provided" }}</strong></div>
+                <div class="case-info-item"><span>Date missing</span><strong>{{ child["missing_date"] or "Not provided" }}</strong></div>
+            </div>
+        </div>
+
+        <div class="case-detail-section">
+            <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-telephone"></i></span><div><h3>Parent / guardian contact</h3><p>Contact details submitted with this case</p></div></div>
+            <div class="case-info-grid">
+                <div class="case-info-item"><span>Parent / guardian</span><strong>{{ child["parent_name"] or "Not provided" }}</strong></div>
+                <div class="case-info-item"><span>Contact number</span><strong>{{ child["phone"] or "Not provided" }}</strong></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="case-detail-card related-cases-card">
+        <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-cpu"></i></span><div><h3>AI match history</h3><p>Candidate records associated with this missing-child case</p></div><span class="case-section-count">{{ matches|length }} record(s)</span></div>
+        {% if matches %}
+        <div class="related-match-list">
+            {% for match in matches %}
+            <article class="related-match-card">
+                <div class="related-match-identity">
+                    {% if match["found_photo"] %}<a class="related-match-photo" href="{{ url_for('view_found.found_child_detail', child_id=match['found_id']) }}"><img src="{{ url_for('static', filename=match['found_photo'].replace('static/', '')) }}" alt="Found child case {{ match['found_id'] }}"></a>{% else %}<span class="related-match-photo"><i class="bi bi-person-check-fill"></i></span>{% endif %}
+                    <div><a class="related-match-name" href="{{ url_for('view_found.found_child_detail', child_id=match['found_id']) if match['found_id'] else '#' }}">Found child case #{{ match["found_id"] or "—" }}</a><span>{{ match["found_location"] or "Location not provided" }} · {{ match["match_date"] or "Date not provided" }}</span></div>
+                </div>
+                <div class="related-match-status">
+                    <strong>{{ "%.2f"|format((match["confidence"] or 0) * 100) }}%</strong>
+                    {% if match["match_type"] == "cross_age" %}<span class="small fw-semibold" style="color:#bd6a00;">Cross-age · ~{{ match["age_gap_years"] }} years</span>{% endif %}
+                    {% if match["verification_status"] == "Verified" %}<span class="badge-status verified">Verified</span>{% elif match["verification_status"] == "Rejected" %}<span class="badge-status rejected">Rejected</span>{% else %}<span class="badge-status pending">Pending review</span>{% endif %}
+                </div>
+                {% if match["verification_status"] == "Pending" %}<a class="related-match-action" href="{{ url_for('verify_match.verify_page', match_id=match['match_id']) }}">Review match <i class="bi bi-arrow-up-right"></i></a>{% endif %}
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}<div class="case-empty-state"><i class="bi bi-search"></i><div><strong>No AI matches yet</strong><span>Potential matches will appear here after the matching engine runs.</span></div><a href="{{ url_for('ai_match.ai_match') }}">Open AI matching</a></div>{% endif %}
+    </section>
+</div>
+{% endblock %}

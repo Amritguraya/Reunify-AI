@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}{{ child['name'] }} | REUNIFY AI{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/operations.css', v='20261014-bg') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page operations-page case-detail-page">
+    <header class="page-header">
+        <div>
+            <div class="eyebrow">PUBLIC MISSING-CHILD CASE</div>
+            <h1 class="page-title">{{ child['name'] }}</h1>
+            <p class="page-description">Identification and contact information for this missing-child case.</p>
+        </div>
+        <a href="{{ url_for('public_directory.missing_children') }}" class="btn-main"><i class="bi bi-arrow-left"></i> All public cases</a>
+    </header>
+
+    <section class="case-detail-card">
+        <div class="case-detail-overview">
+            <div class="case-detail-photo">
+                {% if child['photo_path'] %}
+                <img src="{{ url_for('static', filename=child['photo_path'].replace('static/', '')) }}" alt="Public photo of {{ child['name'] }}">
+                {% else %}<i class="bi bi-person-fill" aria-hidden="true"></i>{% endif %}
+            </div>
+            <div class="case-detail-summary">
+                <span class="case-detail-kicker">PUBLIC IDENTIFICATION PROFILE</span>
+                <h2>{{ child['name'] }}</h2>
+                <p>Compare the public found-child reports below and contact the listed person when a report may relate to this case.</p>
+                <div class="case-detail-tags">
+                    <span><i class="bi bi-calendar-event"></i> Missing {{ child['missing_date'] or 'date not provided' }}</span>
+                </div>
+            </div>
+            <span class="case-record-state"><i class="bi bi-shield-check"></i> Public listing</span>
+        </div>
+
+        <div class="case-detail-section">
+                <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-person-vcard"></i></span><div><h3>Identification information</h3><p>Public case details</p></div></div>
+            <div class="case-info-grid">
+                <div class="case-info-item"><span>Age</span><strong>{% if child['age'] is not none %}{{ child['age'] }} years{% else %}Not provided{% endif %}</strong></div>
+                <div class="case-info-item"><span>Gender</span><strong>{{ child['gender'] or 'Not provided' }}</strong></div>
+                <div class="case-info-item"><span>City last seen</span><strong>{{ child['city'] or 'Not provided' }}</strong></div>
+                <div class="case-info-item"><span>Date missing</span><strong>{{ child['missing_date'] or 'Not provided' }}</strong></div>
+            </div>
+        </div>
+
+        <div class="case-detail-section">
+            <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-telephone"></i></span><div><h3>Family contact</h3><p>Contact details listed for this case</p></div></div>
+            <div class="case-info-grid">
+                <div class="case-info-item"><span>Parent / guardian</span><strong>{{ child['parent_name'] or 'Not provided' }}</strong></div>
+                <div class="case-info-item"><span>Contact number</span><strong>{% if child['phone'] %}<a href="tel:{{ child['phone'] }}">{{ child['phone'] }}</a>{% else %}Not provided{% endif %}</strong></div>
+            </div>
+        </div>
+
+        {% if potential_found_matches %}
+        <div class="case-detail-section">
+            <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-stars"></i></span><div><h3>Related found-child reports</h3><p>Verified matches and possible AI leads for this case</p></div></div>
+            <p class="small text-secondary">Possible AI leads are unverified screening results. Compare the photographs and report details before treating one as an identification.</p>
+            <div class="related-match-list">
+                {% for match in potential_found_matches %}
+                <article class="related-match-card">
+                    <div class="related-match-identity">
+                        {% if match['photo_path'] %}<a class="related-match-photo" href="{{ url_for('public_directory.found_child', child_id=match['id']) }}"><img src="{{ url_for('static', filename=match['photo_path'].replace('static/', '')) }}" alt="Photo from found-child report {{ match['id'] }}"></a>{% endif %}
+                        <div><a class="related-match-name" href="{{ url_for('public_directory.found_child', child_id=match['id']) }}">Found-child report #{{ match['id'] }}</a><span>Estimated age {{ match['estimated_age'] if match['estimated_age'] is not none else 'not provided' }} · {{ match['location_found'] }} · Found {{ match['found_date'] }}</span></div>
+                    </div>
+                    <div class="related-match-status">
+                        {% if match['verification_status'] == 'Verified' %}
+                            <span class="badge-status verified">Verified match</span>
+                        {% else %}
+                            <strong>{{ "%.1f"|format((match['confidence'] or 0) * 100) }}% face similarity</strong>
+                            <span class="badge-status pending">Possible AI lead · unverified</span>
+                            {% if match['match_type'] == 'cross_age' %}<span class="small fw-semibold" style="color:#bd6a00;">Cross-age · about {{ match['age_gap_years'] }} years apart</span>{% endif %}
+                        {% endif %}
+                    </div>
+                    <a class="related-match-action" href="{{ url_for('public_directory.found_child', child_id=match['id']) }}">Compare found report <i class="bi bi-arrow-up-right"></i></a>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="d-flex gap-2 flex-wrap mt-4">
+            <a class="btn-main" href="{{ url_for('public_sightings.report_sighting', child_id=child['id']) }}"><i class="bi bi-chat-left-text"></i> Report a sighting</a>
+            <a class="btn-main" href="{{ url_for('public_directory.missing_children') }}">Back to missing children</a>
+        </div>
+    </section>
+</div>
+{% endblock %}

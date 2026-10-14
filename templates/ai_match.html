@@ -1,0 +1,1209 @@
+{% extends "base.html" %}
+
+{% block title %}AI Matching | REUNIFY AI{% endblock %}
+
+{% block head %}
+
+<style>
+
+.ai-page {
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+/* HEADER */
+
+.ai-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.ai-header-left {
+    max-width: 800px;
+}
+
+.ai-eyebrow {
+    color: #147dff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.ai-title {
+    margin: 0;
+    color: #111c2e;
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+}
+
+.ai-description {
+    margin-top: 10px;
+    color: #77869b;
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 750px;
+}
+
+.engine-status {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px 16px;
+    background: #edfff7;
+    border: 1px solid #c8f3df;
+    border-radius: 12px;
+    color: #08764c;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.engine-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #15c982;
+    box-shadow:
+        0 0 0 4px rgba(21,201,130,.10),
+        0 0 12px rgba(21,201,130,.55);
+}
+
+/* ENGINE CARD */
+
+.engine-card {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(63,150,255,.18),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 15% 90%,
+            rgba(28,201,151,.07),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #07111f 0%,
+            #0b192d 55%,
+            #0c2038 100%
+        );
+
+    border-radius: 22px;
+    padding: 32px;
+    color: white;
+
+    border: 1px solid rgba(255,255,255,.07);
+
+    box-shadow:
+        0 20px 50px rgba(7,17,31,.14);
+
+    margin-bottom: 28px;
+}
+
+.engine-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.engine-label {
+    color: #6faeff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.engine-name {
+    margin-top: 7px;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.engine-subtitle {
+    margin-top: 5px;
+    color: #8191a9;
+    font-size: 12px;
+}
+
+.engine-icon {
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: rgba(52,142,255,.12);
+    border: 1px solid rgba(77,158,255,.25);
+    border-radius: 16px;
+
+    color: #55a6ff;
+    font-size: 27px;
+}
+
+/* PIPELINE */
+
+.process-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 30px;
+}
+
+.process-step {
+    padding: 17px;
+
+    background: rgba(255,255,255,.045);
+
+    border: 1px solid rgba(255,255,255,.075);
+
+    border-radius: 14px;
+
+    transition: .2s ease;
+}
+
+.process-step:hover {
+    background: rgba(255,255,255,.065);
+    transform: translateY(-2px);
+}
+
+.process-number {
+    color: #4ea3ff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.process-title {
+    margin-top: 7px;
+    color: white;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.process-text {
+    margin-top: 5px;
+    color: #75859c;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+/* RUN BUTTON */
+
+.run-area {
+    margin-top: 28px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.run-info {
+    color: #8191a9;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.run-info strong {
+    color: white;
+}
+
+.run-button {
+    border: none;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 13px 22px;
+
+    border-radius: 11px;
+
+    background: #147dff;
+    color: white;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.run-button:hover {
+    background: #0869df;
+    transform: translateY(-2px);
+}
+
+.run-button:disabled {
+    opacity: .65;
+    cursor: not-allowed;
+}
+
+/* ALERT */
+
+.ai-alert {
+    border-radius: 13px;
+    padding: 14px 17px;
+
+    margin-bottom: 25px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.ai-alert.success {
+    background: #e8faf2;
+    border: 1px solid #bcebd6;
+    color: #08764c;
+}
+
+.ai-alert.danger {
+    background: #fff0f1;
+    border: 1px solid #f3c4c8;
+    color: #a51e2a;
+}
+
+/* STATS */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+
+    border: 1px solid #e5ebf2;
+
+    border-radius: 17px;
+
+    padding: 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.stat-icon {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 13px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #edf5ff;
+
+    color: #147dff;
+
+    font-size: 20px;
+}
+
+.stat-label {
+    color: #8997a9;
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .8px;
+
+    font-weight: 800;
+}
+
+.stat-value {
+    color: #182336;
+
+    font-size: 23px;
+
+    font-weight: 900;
+
+    margin-top: 2px;
+}
+
+/* RESULTS */
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 18px;
+}
+
+.results-title {
+    margin: 0;
+
+    color: #182336;
+
+    font-size: 21px;
+
+    font-weight: 800;
+}
+
+.results-count {
+    padding: 7px 12px;
+
+    background: #edf5ff;
+
+    color: #147dff;
+
+    border-radius: 30px;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: .7px;
+}
+
+/* MATCH CARD */
+
+.match-card {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 25px;
+
+    background: white;
+
+    border: 1px solid #e5ebf2;
+
+    border-radius: 18px;
+
+    padding: 22px;
+
+    margin-bottom: 14px;
+
+    transition: .2s ease;
+}
+
+.match-card:hover {
+    transform: translateY(-2px);
+
+    border-color: #d9e4f1;
+
+    box-shadow:
+        0 14px 35px rgba(15,31,55,.08);
+}
+
+.match-left {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    min-width: 0;
+}
+
+.match-icon {
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    background: #edf5ff;
+
+    color: #147dff;
+
+    font-size: 21px;
+}
+
+.match-name {
+    color: #1b2739;
+
+    font-size: 15px;
+
+    font-weight: 800;
+}
+
+.match-details {
+    margin-top: 5px;
+
+    color: #8a98aa;
+
+    font-size: 11px;
+}
+
+.confidence-box {
+    width: 260px;
+
+    flex-shrink: 0;
+}
+
+.confidence-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 7px;
+}
+
+.confidence-label {
+    color: #75849a;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .7px;
+}
+
+.confidence-value {
+    color: #147dff;
+
+    font-size: 16px;
+
+    font-weight: 900;
+}
+
+.confidence-bar {
+    width: 100%;
+
+    height: 7px;
+
+    overflow: hidden;
+
+    background: #edf1f5;
+
+    border-radius: 20px;
+}
+
+.confidence-fill {
+    width: 0;
+
+    height: 100%;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #147dff,
+            #28c997
+        );
+
+    transition: width .8s ease;
+}
+
+/* STATUS */
+
+.match-status {
+    margin-top: 7px;
+}
+
+.status-badge {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #9a6b00;
+}
+
+.status-verified {
+    background: #d9f8eb;
+    color: #08764c;
+}
+
+.status-rejected {
+    background: #ffe1e4;
+    color: #a51e2a;
+}
+
+/* EMPTY */
+
+.empty-state {
+    text-align: center;
+
+    padding: 70px 30px;
+
+    background: white;
+
+    border: 1px solid #e5ebf2;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 8px 30px rgba(15,31,55,.035);
+}
+
+.empty-icon {
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto;
+
+    background: #edf5ff;
+
+    border-radius: 20px;
+
+    color: #147dff;
+
+    font-size: 29px;
+}
+
+.empty-title {
+    margin-top: 18px;
+
+    color: #182336;
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+.empty-text {
+    max-width: 550px;
+
+    margin: 8px auto 22px;
+
+    color: #7d8ba0;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1100px) {
+
+    .process-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media(max-width:900px) {
+
+    .ai-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .match-card {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .confidence-box {
+        width: 100%;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media(max-width:600px) {
+
+    .ai-title {
+        font-size: 32px;
+    }
+
+    .engine-card {
+        padding: 24px;
+    }
+
+    .process-row {
+        grid-template-columns: 1fr;
+    }
+
+    .run-area {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .run-button {
+        justify-content: center;
+    }
+
+}
+
+</style>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/operations.css', v='20261014-bg') }}">
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page operations-page">
+
+<div class="ai-page">
+
+
+<!-- HEADER -->
+
+<div class="ai-header">
+
+    <div class="ai-header-left">
+
+        <div class="ai-eyebrow">
+            Artificial Intelligence
+        </div>
+
+        <h1 class="ai-title">
+            AI Face Matching
+        </h1>
+
+        <div class="ai-description">
+
+            Compare registered missing and found-child records
+            using facial embeddings to identify potential
+            reunification candidates for human verification.
+
+        </div>
+
+    </div>
+
+    <div class="engine-status">
+
+        <span class="engine-dot"></span>
+
+        FACE ENGINE ONLINE
+
+    </div>
+
+</div>
+
+
+<!-- ALERT -->
+
+{% if message %}
+
+<div class="ai-alert {{ message_type }}">
+
+    <i class="bi bi-info-circle-fill me-2"></i>
+
+    {{ message }}
+
+</div>
+
+{% endif %}
+
+
+<!-- ENGINE -->
+
+<div class="engine-card">
+
+    <div class="engine-top">
+
+        <div>
+
+            <div class="engine-label">
+                REUNIFY AI · MATCHING ENGINE
+            </div>
+
+            <div class="engine-name">
+                Facial Recognition Pipeline
+            </div>
+
+            <div class="engine-subtitle">
+
+                Age-aware face comparison and candidate review
+
+            </div>
+
+        </div>
+
+        <div class="engine-icon">
+
+            <i class="bi bi-cpu-fill"></i>
+
+        </div>
+
+    </div>
+
+
+    <!-- PIPELINE -->
+
+    <div class="process-row">
+
+        <div class="process-step">
+
+            <div class="process-number">
+                01
+            </div>
+
+            <div class="process-title">
+                Face Detection
+            </div>
+
+            <div class="process-text">
+                Detect facial regions from submitted photographs.
+            </div>
+
+        </div>
+
+
+        <div class="process-step">
+
+            <div class="process-number">
+                02
+            </div>
+
+            <div class="process-title">
+                Face Embedding
+            </div>
+
+            <div class="process-text">
+                Convert detected faces into numerical representations.
+            </div>
+
+        </div>
+
+
+        <div class="process-step">
+
+            <div class="process-number">
+                03
+            </div>
+
+            <div class="process-title">
+                Embedding Comparison
+            </div>
+
+            <div class="process-text">
+                Compare missing and found-child facial representations.
+            </div>
+
+        </div>
+
+
+        <div class="process-step">
+
+            <div class="process-number">
+                04
+            </div>
+
+            <div class="process-title">
+                Candidate Ranking
+            </div>
+
+            <div class="process-text">
+                Rank potential matches for administrator review.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RUN AI -->
+
+    <div class="run-area">
+
+        <div class="run-info">
+
+            <strong>{{ missing_count }}</strong>
+            missing record(s) ·
+
+            <strong>{{ found_count }}</strong>
+            found record(s)
+
+            <br>
+
+            The engine compares photographs and reported age timelines to surface plausible cross-age leads. Every candidate needs human review.
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{{ url_for('ai_match.ai_match') }}"
+            id="matchForm"
+        >
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <button
+                type="submit"
+                class="run-button"
+                id="runButton"
+            >
+
+                <i class="bi bi-play-fill"></i>
+
+                Run AI Matching
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- STATS -->
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+
+            <i class="bi bi-person-x-fill"></i>
+
+        </div>
+
+        <div>
+
+            <div class="stat-label">
+                Missing Records
+            </div>
+
+            <div class="stat-value">
+                {{ missing_count }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+
+            <i class="bi bi-person-check-fill"></i>
+
+        </div>
+
+        <div>
+
+            <div class="stat-label">
+                Found Records
+            </div>
+
+            <div class="stat-value">
+                {{ found_count }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+
+            <i class="bi bi-stars"></i>
+
+        </div>
+
+        <div>
+
+            <div class="stat-label">
+                Match History
+            </div>
+
+            <div class="stat-value">
+                {{ match_count }}
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- RESULTS -->
+
+<div class="results-header">
+
+    <h2 class="results-title">
+        Potential Reunification Candidates
+    </h2>
+
+    <div class="results-count">
+
+        {{ matches|length }} CANDIDATES
+
+    </div>
+
+</div>
+
+
+{% if matches %}
+
+    {% for match in matches %}
+
+    <div class="match-card">
+
+        <div class="match-left">
+
+            <div class="match-icon">
+
+                <i class="bi bi-person-check-fill"></i>
+
+            </div>
+
+
+            <div>
+
+                <div class="match-name">
+
+                    {{ match["missing_name"] or "Unknown Child" }}
+
+                </div>
+
+
+                <div class="match-details">
+
+                    Missing age:
+                    {{ match["missing_age"] or "—" }}
+
+                    ·
+
+                    Found estimated age:
+                    {{ match["found_age"] or "—" }}
+
+                    ·
+
+                    City:
+                    {{ match["missing_city"] or "—" }}
+
+                    <br>
+
+                    Found location:
+                    {{ match["location_found"] or "—" }}
+
+                </div>
+
+
+                <div class="match-status">
+
+                    {% set status =
+                        (match["verification_status"] or "Pending")
+                        | lower
+                    %}
+
+                    {% if status == "verified" %}
+
+                        <span class="status-badge status-verified">
+                            Verified
+                        </span>
+
+                    {% elif status == "rejected" %}
+
+                        <span class="status-badge status-rejected">
+                            Rejected
+                        </span>
+
+                    {% else %}
+
+                        <span class="status-badge status-pending">
+                            Pending Verification
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+                {% if match["match_type"] == "cross_age" %}
+                    <div class="small fw-semibold mt-2" style="color:#bd6a00;">
+                        Cross-age candidate · reported ages are about
+                        {{ match["age_gap_years"] }} years apart
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- CONFIDENCE -->
+
+        <div class="confidence-box">
+
+            <div class="confidence-top">
+
+                <span class="confidence-label">
+                    Face Similarity
+                </span>
+
+                <span class="confidence-value">
+
+                    {{ "%.1f"|format((match["confidence"] or 0) * 100) }}%
+
+                </span>
+
+            </div>
+
+
+            <div class="confidence-bar">
+
+                <div
+                    class="confidence-fill"
+                    data-confidence="{{ (match['confidence'] or 0) * 100 }}"
+                ></div>
+
+            </div>
+            <div class="small text-secondary mt-2">
+                Similarity is a screening signal, not a match probability or identity confirmation.
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+{% else %}
+
+<div class="empty-state">
+
+    <div class="empty-icon">
+
+        <i class="bi bi-search"></i>
+
+    </div>
+
+
+    <div class="empty-title">
+
+        No Match Results Yet
+
+    </div>
+
+
+    <div class="empty-text">
+
+        {% if missing_count == 0 or found_count == 0 %}
+
+            The database currently contains
+            <strong>{{ missing_count }}</strong>
+            missing record(s) and
+            <strong>{{ found_count }}</strong>
+            found record(s).
+
+            Register at least one missing child and
+            one found child, each with a photograph,
+            before running the AI engine.
+
+        {% else %}
+
+            You have registered both missing and found
+            children.
+
+            New reports are scanned automatically.
+            Click <strong>Run AI Matching</strong> to rescan
+            existing records for additional candidates.
+
+        {% endif %}
+
+    </div>
+
+
+    {% if missing_count == 0 %}
+
+        <a
+            href="/register-missing"
+            class="btn-main me-2"
+        >
+
+            <i class="bi bi-person-plus-fill"></i>
+
+            Register Missing Child
+
+        </a>
+
+    {% endif %}
+
+
+    {% if found_count == 0 %}
+
+        <a
+            href="/register_found"
+            class="btn-main btn-green"
+        >
+
+            <i class="bi bi-person-check-fill"></i>
+
+            Register Found Child
+
+        </a>
+
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+
+</div>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/ai-match.js') }}" defer></script>
+
+{% endblock %}

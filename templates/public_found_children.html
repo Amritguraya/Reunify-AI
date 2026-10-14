@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Found Children | REUNIFY AI{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/operations.css', v='20261014-bg') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page operations-page">
+    <header class="page-header">
+        <div>
+            <div class="eyebrow">PUBLIC CASE SEARCH · FOUND REPORTS</div>
+            <h1 class="page-title">Found Children</h1>
+            <p class="page-description">Browse found-child reports, compare the details with a missing child, and contact the person who submitted the report. Public case discovery and AI face matching are equal paths in this platform.</p>
+        </div>
+    </header>
+
+    <section class="panel mb-4" aria-label="Search found-child reports">
+        <form method="get" action="{{ url_for('public_directory.found_children') }}" class="d-flex gap-2 flex-wrap">
+            <label class="visually-hidden" for="found-case-search">Search by case number, location, country or report details</label>
+            <input id="found-case-search" name="q" class="form-control" type="search" maxlength="80" value="{{ search_query }}" placeholder="Search case number, location, country or details">
+            <button class="btn-main" type="submit"><i class="bi bi-search"></i> Search</button>
+            {% if search_query %}<a class="btn-main" href="{{ url_for('public_directory.found_children') }}">Clear</a>{% endif %}
+        </form>
+    </section>
+
+    <section class="panel">
+        <div class="records-heading">
+            <div class="records-heading-copy">
+                <span class="records-kicker">PUBLIC FOUND-CHILD REPORTS</span>
+                <h2>Reports families can check</h2>
+                <p>Open a report to see its photo, found location, details, and submitter contact.</p>
+            </div>
+            <div class="records-count"><i class="bi bi-people"></i><strong>{{ total_cases }}</strong><span>total records</span></div>
+        </div>
+
+        {% if children %}
+        <div class="row g-4">
+            {% for child in children %}
+            <div class="col-md-6 col-xl-4">
+                <article class="panel h-100">
+                    <a href="{{ url_for('public_directory.found_child', child_id=child['id']) }}" aria-label="View found-child report {{ child['id'] }}">
+                        {% if child['photo_path'] %}
+                        <img src="{{ url_for('static', filename=child['photo_path'].replace('static/', '')) }}" alt="Photo for found-child report {{ child['id'] }}" loading="lazy" style="width:100%;height:240px;object-fit:cover;border-radius:14px;">
+                        {% else %}
+                        <div class="d-flex align-items-center justify-content-center bg-light rounded-4" style="height:240px;"><i class="bi bi-person text-secondary" style="font-size:56px;"></i></div>
+                        {% endif %}
+                    </a>
+                    <div class="pt-3">
+                        <div class="d-flex justify-content-between align-items-center gap-2">
+                            <h2 class="h4 fw-bold mb-0"><a class="table-child-name" href="{{ url_for('public_directory.found_child', child_id=child['id']) }}">Found child · #{{ child['id'] }}</a></h2>
+                            {% if child['has_verified_match'] %}<span class="badge-status verified"><i class="bi bi-shield-check"></i> Verified match</span>{% else %}<span class="badge-status pending">{{ child['status'] or 'Reported' }}</span>{% endif %}
+                        </div>
+                        <p class="text-secondary mt-3 mb-1">{% if child['estimated_age'] is not none %}About {{ child['estimated_age'] }} years{% else %}Age not provided{% endif %}{% if child['gender'] %} · {{ child['gender'] }}{% endif %}</p>
+                        <p class="text-secondary mb-1"><i class="bi bi-geo-alt"></i> {{ child['location_found'] }}, {{ child['country'] }}</p>
+                        <p class="text-secondary mb-3"><i class="bi bi-calendar-event"></i> Found {{ child['found_date'] }}</p>
+                        <a class="btn-main" href="{{ url_for('public_directory.found_child', child_id=child['id']) }}">View report</a>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-search" aria-hidden="true" style="font-size:50px;color:#cbd5e1;"></i>
+            <h3 class="mt-3">No found-child reports match</h3>
+            <p class="text-secondary">Try a different location, country, or case number.</p>
+        </div>
+        {% endif %}
+        {% if total_pages > 1 %}
+        <nav aria-label="Found-child report pages" class="mt-4">
+            <ul class="pagination justify-content-center mb-0">
+                <li class="page-item{% if page == 1 %} disabled{% endif %}">
+                    {% if page > 1 %}<a class="page-link" href="{{ url_for('public_directory.found_children', page=page - 1, q=search_query or None) }}">Previous</a>{% else %}<span class="page-link">Previous</span>{% endif %}
+                </li>
+                <li class="page-item disabled"><span class="page-link">Page {{ page }} of {{ total_pages }}</span></li>
+                <li class="page-item{% if page == total_pages %} disabled{% endif %}">
+                    {% if page < total_pages %}<a class="page-link" href="{{ url_for('public_directory.found_children', page=page + 1, q=search_query or None) }}">Next</a>{% else %}<span class="page-link">Next</span>{% endif %}
+                </li>
+            </ul>
+        </nav>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

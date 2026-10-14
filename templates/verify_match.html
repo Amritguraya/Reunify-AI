@@ -1,0 +1,754 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Match | REUNIFY AI{% endblock %}
+
+{% block content %}
+
+<style>
+
+.verify-header {
+    background:
+        radial-gradient(circle at 90% 10%, rgba(20,125,255,.18), transparent 35%),
+        linear-gradient(135deg, #0b1628, #102642);
+    color: white;
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 28px;
+}
+
+.verify-eyebrow {
+    color: #4ca4ff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.verify-title {
+    font-size: 34px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.verify-subtitle {
+    color: #9eabc0;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.match-panel {
+    background: white;
+    border: 1px solid #e6ebf2;
+    border-radius: 22px;
+    padding: 26px;
+    box-shadow: 0 8px 30px rgba(15,31,55,.05);
+}
+
+.case-title {
+    font-size: 17px;
+    font-weight: 800;
+    margin-bottom: 18px;
+}
+
+.photo-card {
+    background: #f7f9fc;
+    border: 1px solid #e5eaf1;
+    border-radius: 16px;
+    padding: 12px;
+}
+
+.photo-card img {
+    width: 100%;
+    height: 330px;
+    object-fit: cover;
+    border-radius: 12px;
+    background: #e8edf3;
+}
+
+.photo-label {
+    text-align: center;
+    margin-top: 12px;
+    color: #65758b;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.details {
+    margin-top: 20px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 12px 0;
+    border-bottom: 1px solid #edf1f5;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    color: #8a98ac;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.detail-value {
+    color: #263449;
+    font-size: 12px;
+    font-weight: 800;
+    text-align: right;
+}
+
+.score-panel {
+    margin-top: 25px;
+    padding: 25px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #edf6ff, #f8fbff);
+    border: 1px solid #dcecff;
+    text-align: center;
+}
+
+.score-label {
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.score {
+    color: #147dff;
+    font-size: 44px;
+    font-weight: 900;
+    margin-top: 4px;
+}
+
+.score-note {
+    color: #8290a3;
+    font-size: 11px;
+}
+
+.warning {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 22px;
+    padding: 16px;
+    border-radius: 13px;
+    background: #fff8e6;
+    border: 1px solid #f4df9c;
+}
+
+.warning i {
+    color: #c48a00;
+    font-size: 18px;
+}
+
+.warning-title {
+    color: #795900;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.warning-text {
+    color: #8b6d1d;
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.action-area {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.verify-btn,
+.reject-btn {
+    flex: 1;
+    border-radius: 11px;
+    padding: 14px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 800;
+    transition: .2s ease;
+}
+
+.verify-btn {
+    background: #139b67;
+    color: white;
+}
+
+.verify-btn:hover {
+    background: #087b50;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.reject-btn {
+    background: #fff0f1;
+    color: #c72f3c;
+}
+
+.reject-btn:hover {
+    background: #ffe0e3;
+    color: #a51e2a;
+    transform: translateY(-2px);
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #65758b;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.back-btn:hover {
+    color: #147dff;
+}
+
+.case-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    background: #edf5ff;
+    color: #147dff;
+    border-radius: 7px;
+    font-size: 10px;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+/* Match the shared ivory-and-orange application theme. */
+.verify-header {
+    position: relative;
+    overflow: hidden;
+    color: #302720;
+    border: 1px solid #f0d9c8;
+    background:
+        radial-gradient(circle at 88% 12%, rgba(232,117,50,.13), transparent 32%),
+        linear-gradient(125deg, #fff0e4 0%, #fff9f4 58%, #fff 100%);
+    box-shadow: 0 14px 36px rgba(95,55,30,.06);
+}
+
+.verify-header::after {
+    content: "";
+    position: absolute;
+    width: 190px;
+    height: 190px;
+    right: -54px;
+    bottom: -115px;
+    border: 1px solid rgba(213,104,47,.15);
+    border-radius: 50%;
+    box-shadow: 0 0 0 22px rgba(213,104,47,.035), 0 0 0 44px rgba(213,104,47,.025);
+    pointer-events: none;
+}
+
+.verify-eyebrow { color: #bc5927; }
+.verify-title { color: #302720; letter-spacing: -1.2px; }
+.verify-subtitle { color: #78695f; }
+.match-panel {
+    border-color: #efe2d6;
+    box-shadow: 0 12px 30px rgba(74,46,25,.055);
+}
+.case-title { color: #302720; }
+.case-title .text-primary { color: #df7135 !important; }
+.case-badge {
+    color: #a94d20;
+    background: #fff2e8;
+    border: 1px solid #f5ddcb;
+}
+.photo-card { background: #fffaf6; border-color: #efe2d6; }
+.photo-card img { background: #f4e8de; }
+.photo-label { color: #9b7862; }
+.detail-row { border-color: #f1e9e2; }
+.detail-label { color: #918277; }
+.detail-value { color: #392d25; }
+.score-panel {
+    background: linear-gradient(135deg, #fff2e8, #fffaf6);
+    border-color: #f1d7c4;
+}
+.score-label { color: #8d6e59; }
+.score { color: #d7652c; }
+.score-note { color: #958579; }
+.warning { background: #fff8e9; border-color: #f1dfb5; }
+.warning i { color: #bd812b; }
+.verify-btn {
+    color: #fff;
+    background: linear-gradient(135deg, #ee8b49, #d65d27);
+    box-shadow: 0 8px 18px rgba(214,93,39,.18);
+}
+.verify-btn:hover { color: #fff; background: #bd4f1c; }
+.reject-btn { border: 1px solid #f2d6d8; }
+.back-btn { color: #78695f; }
+.back-btn:hover { color: #c45422; }
+.text-center .bi-search { color: #dc7135 !important; }
+.text-center h3 { color: #302720; }
+.action-area form { display: flex; flex: 1; margin: 0; }
+.action-area form button { width: 100%; border: 0; cursor: pointer; font-family: inherit; }
+
+@media (max-width: 800px) {
+    .verify-header { padding: 25px; }
+    .verify-title { font-size: 29px; }
+    .match-panel { padding: 20px; }
+}
+
+@media(max-width: 800px) {
+
+    .photo-card img {
+        height: 260px;
+    }
+
+    .action-area {
+        flex-direction: column;
+    }
+
+}
+
+</style>
+
+
+<div class="page verify-page">
+
+    <!-- HEADER -->
+
+    <div class="verify-header">
+
+        <div class="verify-eyebrow">
+            HUMAN VERIFICATION
+        </div>
+
+        <h1 class="verify-title">
+            Verify Potential Match
+        </h1>
+
+        <div class="verify-subtitle">
+            Review the AI-generated candidate before making a final
+            verification decision.
+        </div>
+
+    </div>
+
+
+    {% if match %}
+
+    <!-- PHOTO COMPARISON -->
+
+    <div class="row g-4">
+
+        <!-- MISSING CHILD -->
+
+        <div class="col-lg-6">
+
+            <div class="match-panel">
+
+                <div class="case-title">
+
+                    <i class="bi bi-person-x-fill text-primary"></i>
+
+                    Missing Child
+
+                </div>
+
+                <div class="case-badge">
+
+                    CASE #{{ match["missing_child_id"] }}
+
+                </div>
+
+
+                <div class="photo-card">
+
+                    {% if match["missing_photo"] %}
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename=match['missing_photo'].replace('static/', '')
+                        ) }}"
+                        alt="Missing child"
+                    >
+
+                    {% else %}
+
+                    <div
+                        class="d-flex align-items-center justify-content-center"
+                        style="height:330px;"
+                    >
+
+                        <span class="text-secondary">
+                            No photo available
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                    <div class="photo-label">
+                        Registered Missing Child
+                    </div>
+
+                </div>
+
+
+                <div class="details">
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Name
+                        </span>
+
+                        <span class="detail-value">
+                            {{ match["missing_name"] }}
+                        </span>
+
+                    </div>
+
+                    {% if match["missing_age"] is defined %}
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Age
+                        </span>
+
+                        <span class="detail-value">
+                            {{ match["missing_age"] }}
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                    {% if match["missing_gender"] is defined %}
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Gender
+                        </span>
+
+                        <span class="detail-value">
+                            {{ match["missing_gender"] }}
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                    {% if match["missing_city"] is defined %}
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            City
+                        </span>
+
+                        <span class="detail-value">
+                            {{ match["missing_city"] }}
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOUND CHILD -->
+
+        <div class="col-lg-6">
+
+            <div class="match-panel">
+
+                <div class="case-title">
+
+                    <i class="bi bi-person-check-fill text-success"></i>
+
+                    Found Child
+
+                </div>
+
+                <div class="case-badge">
+
+                    CASE #{{ match["found_child_id"] }}
+
+                </div>
+
+
+                <div class="photo-card">
+
+                    {% if match["found_photo"] %}
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename=match['found_photo'].replace('static/', '')
+                        ) }}"
+                        alt="Found child"
+                    >
+
+                    {% else %}
+
+                    <div
+                        class="d-flex align-items-center justify-content-center"
+                        style="height:330px;"
+                    >
+
+                        <span class="text-secondary">
+                            No photo available
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                    <div class="photo-label">
+                        Registered Found Child
+                    </div>
+
+                </div>
+
+
+                <div class="details">
+
+                    {% if match["found_age"] is defined %}
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Estimated Age
+                        </span>
+
+                        <span class="detail-value">
+                            {{ match["found_age"] }}
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                    {% if match["found_gender"] is defined %}
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Gender
+                        </span>
+
+                        <span class="detail-value">
+                            {{ match["found_gender"] }}
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                    {% if match["found_location"] is defined %}
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Found Location
+                        </span>
+
+                        <span class="detail-value">
+                            {{ match["found_location"] }}
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                    {% if match["found_date"] is defined %}
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Found Date
+                        </span>
+
+                        <span class="detail-value">
+                            {{ match["found_date"] }}
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- AI RESULT -->
+
+    <div class="match-panel mt-4">
+
+        <div class="score-panel">
+
+            <div class="score-label">
+                AI Face Similarity
+            </div>
+
+            <div class="score">
+
+                {% if match["confidence"] <= 1 %}
+
+                    {{ "%.2f"|format(match["confidence"] * 100) }}%
+
+                {% else %}
+
+                    {{ "%.2f"|format(match["confidence"]) }}%
+
+                {% endif %}
+
+            </div>
+
+            <div class="score-note">
+                Face similarity is a screening signal, not proof of identity.
+            </div>
+            {% if match["match_type"] == "cross_age" %}
+                <div class="mt-2 small fw-semibold" style="color:#bd6a00;">
+                    Cross-age candidate · reported ages are about
+                    {{ match["age_gap_years"] }} years apart
+                </div>
+            {% endif %}
+
+        </div>
+
+
+        <!-- WARNING -->
+
+        <div class="warning">
+
+            <i class="bi bi-exclamation-triangle-fill"></i>
+
+            <div>
+
+                <div class="warning-title">
+                    HUMAN REVIEW REQUIRED
+                </div>
+
+                <div class="warning-text">
+                    This score represents a possible facial similarity.
+                    It must not be treated as automatic identification.
+                    Review the available evidence before confirming.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTION BUTTONS -->
+
+        <div class="action-area">
+
+            <form method="post" action="{{ url_for('verify_match.verify', match_id=match['id']) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button
+                    type="submit"
+                    class="verify-btn"
+                    data-confirm="Are you sure you want to verify this match?"
+                >
+
+                    <i class="bi bi-shield-check"></i>
+
+                    Verify Match
+
+                </button>
+            </form>
+
+
+            <form method="post" action="{{ url_for('verify_match.reject', match_id=match['id']) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button
+                    type="submit"
+                    class="reject-btn"
+                    data-confirm="Are you sure you want to reject this match?"
+                >
+
+                    <i class="bi bi-x-circle"></i>
+
+                    Reject Match
+
+                </button>
+            </form>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('match_history.match_history') }}"
+            class="back-btn"
+        >
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back to Match History
+
+        </a>
+
+    </div>
+
+
+    {% else %}
+
+    <!-- NO MATCH -->
+
+    <div class="match-panel">
+
+        <div class="text-center py-5">
+
+            <i
+                class="bi bi-search"
+                style="font-size:55px;color:#cbd5e1;"
+            ></i>
+
+            <h3 class="mt-3 fw-bold">
+                Match Not Found
+            </h3>
+
+            <p class="text-secondary">
+                The requested match does not exist or is no longer
+                available for verification.
+            </p>
+
+            <a
+                href="{{ url_for('match_history.match_history') }}"
+                class="btn-main mt-3"
+            >
+
+                <i class="bi bi-clock-history"></i>
+
+                Return to Match History
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

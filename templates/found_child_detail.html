@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Found Child Case #{{ child["id"] }} | REUNIFY AI{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/operations.css', v='20261014-bg') }}">{% endblock %}
+{% block content %}
+<div class="page operations-page case-detail-page">
+    <header class="page-header">
+        <div>
+            <div class="eyebrow">FOUND CHILD CASE</div>
+            <h1 class="page-title">Found Child #{{ child["id"] }}</h1>
+            <p class="page-description">Complete case information · {{ child["found_date"] or "Date not provided" }}</p>
+        </div>
+        <a href="{{ url_for('view_found.view_found') }}" class="btn-main"><i class="bi bi-arrow-left"></i> All found cases</a>
+    </header>
+
+    <section class="case-detail-card">
+        <div class="case-detail-overview">
+            <div class="case-detail-photo">
+                {% if child["photo_path"] %}
+                    <img src="{{ url_for('static', filename=child['photo_path'].replace('static/', '')) }}" alt="Photo for found child case {{ child['id'] }}">
+                {% else %}
+                    <i class="bi bi-person-fill" aria-hidden="true"></i>
+                {% endif %}
+            </div>
+            <div class="case-detail-summary">
+                <span class="case-detail-kicker">IDENTIFICATION PROFILE</span>
+                <h2>Found child case #{{ child["id"] }}</h2>
+                <p>Details recorded when this child was found, including the reporter and location information.</p>
+                <div class="case-detail-tags">
+                    <span><i class="bi bi-hash"></i> Case {{ child["id"] }}</span>
+                    <span><i class="bi bi-calendar-event"></i> Found {{ child["found_date"] or "date not provided" }}</span>
+                </div>
+            </div>
+            <span class="case-record-state"><i class="bi bi-person-check"></i> {{ child["status"] or "Pending" }}</span>
+        </div>
+
+        <div class="case-detail-section">
+            <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-person-vcard"></i></span><div><h3>Child information</h3><p>Identification and location details</p></div></div>
+            <div class="case-info-grid">
+                <div class="case-info-item"><span>Estimated age</span><strong>{% if child["estimated_age"] is not none %}{{ child["estimated_age"] }} years{% else %}Not provided{% endif %}</strong></div>
+                <div class="case-info-item"><span>Gender</span><strong>{{ child["gender"] or "Not provided" }}</strong></div>
+                <div class="case-info-item"><span>Location found</span><strong>{{ child["location_found"] or "Not provided" }}</strong></div>
+                <div class="case-info-item"><span>Country</span><strong>{{ child["country"] or "Not provided" }}</strong></div>
+                <div class="case-info-item"><span>Date found</span><strong>{{ child["found_date"] or "Not provided" }}</strong></div>
+                <div class="case-info-item"><span>Case status</span><strong>{{ child["status"] or "Pending" }}</strong></div>
+            </div>
+        </div>
+
+        <div class="case-detail-section">
+            <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-card-text"></i></span><div><h3>Description</h3><p>Additional observations from the found-child report</p></div></div>
+            <div class="case-description-box">{{ child["description"] or "No additional description was provided." }}</div>
+        </div>
+
+        <div class="case-detail-section">
+            <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-person-lines-fill"></i></span><div><h3>Reporter information</h3><p>Person who submitted this found-child report</p></div></div>
+            <div class="case-info-grid">
+                <div class="case-info-item"><span>Reporter name</span><strong>{{ child["reporter_name"] or "Not provided" }}</strong></div>
+                <div class="case-info-item"><span>Reporter contact</span><strong>{{ child["reporter_contact"] or "Not provided" }}</strong></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="case-detail-card related-cases-card">
+        <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-cpu"></i></span><div><h3>AI match history</h3><p>Missing-child candidates associated with this found-child case</p></div><span class="case-section-count">{{ matches|length }} record(s)</span></div>
+        {% if matches %}
+        <div class="related-match-list">
+            {% for match in matches %}
+            <article class="related-match-card">
+                <div class="related-match-identity">
+                    {% if match["missing_photo"] and match["missing_id"] %}<a class="related-match-photo" href="{{ url_for('view_missing.missing_child_detail', child_id=match['missing_id']) }}"><img src="{{ url_for('static', filename=match['missing_photo'].replace('static/', '')) }}" alt="{{ match['missing_name'] or 'Missing child' }}"></a>{% else %}<span class="related-match-photo"><i class="bi bi-person-fill"></i></span>{% endif %}
+                    <div>{% if match["missing_id"] %}<a class="related-match-name" href="{{ url_for('view_missing.missing_child_detail', child_id=match['missing_id']) }}">{{ match["missing_name"] or "Missing child" }}</a>{% else %}<strong class="related-match-name">Missing child</strong>{% endif %}<span>Case #{{ match["missing_id"] or "—" }} · {{ match["missing_city"] or "City not provided" }} · {{ match["match_date"] or "Date not provided" }}</span></div>
+                </div>
+                <div class="related-match-status">
+                    <strong>{{ "%.2f"|format((match["confidence"] or 0) * 100) }}%</strong>
+                    {% if match["match_type"] == "cross_age" %}<span class="small fw-semibold" style="color:#bd6a00;">Cross-age · ~{{ match["age_gap_years"] }} years</span>{% endif %}
+                    {% if match["verification_status"] == "Verified" %}<span class="badge-status verified">Verified</span>{% elif match["verification_status"] == "Rejected" %}<span class="badge-status rejected">Rejected</span>{% else %}<span class="badge-status pending">Pending review</span>{% endif %}
+                </div>
+                {% if match["verification_status"] == "Pending" %}<a class="related-match-action" href="{{ url_for('verify_match.verify_page', match_id=match['match_id']) }}">Review match <i class="bi bi-arrow-up-right"></i></a>{% endif %}
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}<div class="case-empty-state"><i class="bi bi-search"></i><div><strong>No AI matches yet</strong><span>Potential matches will appear here after the matching engine runs.</span></div><a href="{{ url_for('ai_match.ai_match') }}">Open AI matching</a></div>{% endif %}
+    </section>
+</div>
+{% endblock %}

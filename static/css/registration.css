@@ -1,0 +1,88 @@
+/* Reunify AI registration forms — welcoming, clear, and card based. */
+.registration-page { max-width: 1440px; margin: 0 auto; padding: 2px 0 28px; color:#302720; }
+.registration-page .page-header { position:relative; isolation:isolate; overflow:hidden; display:flex; align-items:center; min-height:170px; padding:30px 34px; margin:0 0 24px; border:1px solid #f0d9c7; border-radius:24px; background:radial-gradient(circle at 90% 10%,rgba(255,255,255,.96),transparent 25%),linear-gradient(115deg,#fff0e4 0%,#fff8f2 62%,#fff 100%); box-shadow:0 14px 34px rgba(112,70,39,.06); }
+.registration-page .page-header::after { content:""; position:absolute; z-index:-1; width:190px; height:190px; right:4%; top:-90px; border:1px solid rgba(224,117,59,.12); border-radius:50%; box-shadow:0 0 0 22px rgba(224,117,59,.035),0 0 0 48px rgba(224,117,59,.025); }
+.registration-page .eyebrow { display:inline-flex; align-items:center; gap:7px; margin-bottom:12px; padding:7px 11px; border:1px solid #f4ddca; border-radius:99px; background:rgba(255,255,255,.75); color:#bd5927!important; font-size:10px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
+.registration-page .eyebrow::before { content:""; width:7px; height:7px; border-radius:50%; background:#e87532; box-shadow:0 0 0 3px #ffeadc; }
+.registration-page .page-title { margin:0; color:#2e2721!important; font-size:clamp(28px,3vw,38px); font-weight:800; letter-spacing:-.045em; line-height:1.1; }
+.registration-page .page-description { max-width:660px; margin:10px 0 0; color:#7d7167!important; font-size:14px; line-height:1.65; }
+.registration-page .row.g-4 { align-items:stretch; --bs-gutter-x:1.25rem; --bs-gutter-y:1.25rem; }
+.registration-page .case-card { position:relative; height:100%; overflow:hidden; padding:clamp(20px,2.2vw,30px); border:1px solid #eee2d8!important; border-radius:22px; background:linear-gradient(150deg,#fff 0%,#fffdfa 100%)!important; box-shadow:0 12px 32px rgba(63,43,28,.055)!important; transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease; }
+.registration-page .case-card::before { content:""; position:absolute; top:0; left:28px; width:54px; height:3px; border-radius:0 0 5px 5px; background:linear-gradient(90deg,#f4a56f,#dc682f); }
+.registration-page .case-card:hover { transform:translateY(-2px); border-color:#ead4c3!important; box-shadow:0 18px 38px rgba(63,43,28,.075)!important; }
+.registration-page .case-card-photo { background:linear-gradient(155deg,#fffaf6 0%,#fff 68%)!important; }
+.registration-page .case-card > h5 { display:flex; align-items:center; gap:13px; min-height:52px; padding:0 0 17px!important; margin:0 0 24px!important; border-bottom:1px solid #f0e7df; color:#332920!important; font-size:18px; font-weight:800!important; letter-spacing:-.02em; }
+.registration-page .case-card > h5 > i { display:inline-flex; align-items:center; justify-content:center; flex:0 0 46px; width:46px; height:46px; margin:0!important; border-radius:15px; background:linear-gradient(145deg,#f49a5c,#dc672e); color:#fff!important; font-size:18px; box-shadow:0 8px 16px rgba(220,103,46,.19); }
+.registration-page .case-card-profile > h5::after { content:"CHILD DETAILS"; }
+.registration-page .case-card-photo > h5::after { content:"PHOTO ID"; }
+.registration-page .case-card-reporter > h5::after { content:"CONTACT"; }
+.registration-page .case-card-date > h5::after { content:"CASE TIMELINE"; }
+.registration-page .case-card > h5::after { margin-left:auto; padding:6px 9px; border:1px solid #f3e2d5; border-radius:99px; background:#fff8f2; color:#bd6a3b; font-size:8px; font-weight:800; letter-spacing:.12em; white-space:nowrap; }
+.registration-page .form-label { margin-bottom:8px; color:#51443a!important; font-size:12px; font-weight:750; }
+.registration-page .form-control,.registration-page .form-select { min-height:51px; border:1px solid #e9ddd2!important; border-radius:12px!important; background-color:#fff!important; color:#332a24!important; font-size:13px; box-shadow:none!important; transition:border-color .18s ease,box-shadow .18s ease,background-color .18s ease; }
+.registration-page .form-control:not([type="file"]),.registration-page .form-select { padding:12px 15px; }
+.registration-page .form-control::placeholder { color:#a99c91!important; opacity:1; }
+.registration-page .form-control:hover,.registration-page .form-select:hover { border-color:#dfc6b4!important; }
+.registration-page .form-control:focus,.registration-page .form-select:focus { border-color:#e98951!important; background-color:#fff!important; box-shadow:0 0 0 4px rgba(232,117,50,.12)!important; }
+.registration-page .select-arrow { color:#c16b3d!important; }
+.registration-page .select-wrapper:focus-within .select-arrow { color:#bf5928!important; }
+.registration-page input[type="file"] { padding:7px; color:#75685d; cursor:pointer; }
+.registration-page input[type="file"]::file-selector-button { min-height:35px; margin:-1px 12px -1px -1px; padding:0 13px; border:0; border-right:1px solid #f1dfd1; border-radius:8px 0 0 8px; background:#fff3e9; color:#a84d20; font-weight:700; cursor:pointer; }
+.registration-page .photo-preview { min-height:210px; margin-top:16px!important; border:1px dashed #e7b996!important; border-radius:17px!important; background:radial-gradient(circle at 50% 0%,#fff 0%,#fff8f2 78%)!important; color:#a38b79!important; transition:border-color .2s ease,background .2s ease; }
+.registration-page .photo-preview i { color:#de7a42!important; font-size:38px!important; }
+.registration-page .photo-preview span { font-size:12px; font-weight:600; }
+.registration-page .photo-preview img { border:1px solid rgba(255,255,255,.8); box-shadow:0 8px 18px rgba(51,37,25,.12); }
+.registration-page .text-secondary { color:#8d7f73!important; font-size:11px; line-height:1.65; }
+.registration-page .btn-main,.registration-page .btn-green { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:52px; padding:0 22px; border:1px solid #d9612c!important; border-radius:13px!important; background:linear-gradient(135deg,#f28a49,#d95d27)!important; color:#fff!important; font-size:13px; font-weight:800; box-shadow:0 9px 19px rgba(217,93,39,.2); transition:transform .18s ease,box-shadow .18s ease,filter .18s ease; }
+.registration-page .btn-main:hover,.registration-page .btn-green:hover { transform:translateY(-1px); filter:brightness(1.03); box-shadow:0 13px 25px rgba(217,93,39,.25); }
+.registration-page .btn-main:focus-visible,.registration-page .btn-green:focus-visible { outline:3px solid rgba(232,117,50,.3); outline-offset:3px; }
+.registration-page .field-error,.registration-page .validation-message,.registration-page .invalid-feedback { font-size:11px; }
+.registration-page .validation-summary { border:1px solid #f1c8b2!important; border-radius:16px!important; background:#fff7f2!important; color:#963d21!important; box-shadow:0 8px 22px rgba(112,52,24,.05); }
+.registration-page .form-control.invalid,.registration-page .form-select.invalid,.registration-page .form-control.is-invalid,.registration-page .form-select.is-invalid { border-color:#dc6b53!important; box-shadow:0 0 0 3px rgba(220,107,83,.1)!important; }
+
+/* Give case intake a more editorial, readable finish while preserving its fields. */
+.registration-page .page-header {
+    background:
+        radial-gradient(ellipse at 88% 0%, rgba(255,255,255,.98), transparent 19rem),
+        radial-gradient(ellipse at 4% 100%, rgba(255,224,201,.56), transparent 24rem),
+        linear-gradient(120deg,#fff0e4 0%,#fff9f4 56%,#fff 100%) !important;
+    box-shadow: 0 18px 42px rgba(112,70,39,.075) !important;
+}
+.registration-page .case-card {
+    background:
+        radial-gradient(ellipse at 100% 0%, rgba(255,239,226,.46), transparent 16rem),
+        linear-gradient(145deg,#fff 0%,#fffdfa 72%,#fff9f4 100%) !important;
+    box-shadow: 0 15px 36px rgba(63,43,28,.06) !important;
+}
+.registration-page .page-header { min-height: 180px; padding: 34px 38px; border-radius: 25px; }
+.registration-page .eyebrow { font-size: 11px; }
+.registration-page .page-title { font-size: clamp(32px,3.2vw,42px); }
+.registration-page .page-description { font-size: 15px; line-height: 1.7; }
+.registration-page .row.g-4 { --bs-gutter-x: 1.5rem; --bs-gutter-y: 1.5rem; }
+.registration-page .case-card { padding: clamp(23px,2.5vw,34px); border-radius: 23px; }
+.registration-page .case-card > h5 { font-size: 19px; }
+.registration-page .case-card > h5::after { font-size: 9px; }
+.registration-page .case-card > h5::after { font-size: 10px !important; }
+.registration-page .form-label { font-size: 13px; }
+.registration-page .form-control,
+.registration-page .form-select { min-height: 54px; font-size: 14px; }
+.registration-page .text-secondary { font-size: 12px; }
+.registration-page .photo-preview { min-height: 230px; }
+.registration-page .photo-preview span { font-size: 13px; }
+.registration-page .btn-main,
+.registration-page .btn-green { min-height: 54px; font-size: 14px; }
+.registration-page .field-error,
+.registration-page .validation-message,
+.registration-page .invalid-feedback { font-size: 12px; }
+@media(max-width:991px) {
+    .registration-page .page-header { padding: 28px; }
+}
+@media(max-width:575px) {
+    .registration-page .page-header { padding: 23px 20px; }
+    .registration-page .page-title { font-size: 30px; }
+    .registration-page .page-description { font-size: 13px; }
+    .registration-page .case-card { padding: 20px; }
+}
+
+@media(max-width:991px){.registration-page .page-header{min-height:unset;padding:26px}.registration-page .case-card{height:auto}}
+@media(max-width:575px){.registration-page .page-header{padding:23px 20px;border-radius:20px}.registration-page .page-title{font-size:29px}.registration-page .page-description{font-size:13px}.registration-page .case-card{padding:20px;border-radius:18px}.registration-page .case-card>h5{gap:10px;font-size:16px}.registration-page .case-card>h5>i{flex-basis:42px;width:42px;height:42px}.registration-page .case-card>h5::after{font-size:7px;padding:5px 7px}.registration-page .btn-main,.registration-page .btn-green{width:100%}}

@@ -1,0 +1,896 @@
+{% extends "base.html" %}
+
+{% block title %}Register Found Child | REUNIFY AI{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/registration.css', v='20261014-bg') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page registration-page">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="page-header">
+
+        <div>
+
+            <div class="eyebrow">
+                Case Management
+            </div>
+
+            <h1 class="page-title">
+                Register Found Child
+            </h1>
+
+            <p class="page-description">
+                Record a found child so the AI system can search
+                for possible reunification candidates.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+        autocomplete="off"
+        id="foundChildForm"
+        novalidate
+    >
+
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+            <label for="foundCompanyWebsite">Leave this field empty</label>
+            <input id="foundCompanyWebsite" type="text" name="company_website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="row g-4">
+
+
+            <!-- =================================================
+                 FOUND CHILD DETAILS
+            ================================================== -->
+
+            <div class="col-lg-8">
+
+                <div class="panel case-card case-card-profile">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-person-check me-2 text-success"></i>
+
+                        Found Child Details
+
+                    </h5>
+
+
+                    <div class="row g-4">
+
+
+                        <!-- ESTIMATED AGE -->
+
+                        <div class="col-md-4">
+
+                            <label
+                                for="estimatedAge"
+                                class="form-label"
+                            >
+                                Estimated Age
+                            </label>
+
+                            <input
+                                type="number"
+                                id="estimatedAge"
+                                name="estimated_age"
+                                class="form-control"
+                                min="0"
+                                max="99"
+                                step="1"
+                                placeholder="Age"
+                                required
+                            >
+
+                            <div
+                                class="invalid-feedback"
+                                id="ageError"
+                            >
+                                Age must be valid.
+                            </div>
+
+                        </div>
+
+
+                        <!-- GENDER -->
+
+                        <div class="col-md-4">
+
+                            <label
+                                for="gender"
+                                class="form-label"
+                            >
+                                Gender
+                            </label>
+
+                            <div class="select-wrapper">
+
+                                <select
+                                    id="gender"
+                                    name="gender"
+                                    class="form-select"
+                                    required
+                                >
+
+                                    <option
+                                        value=""
+                                        selected
+                                        disabled
+                                    >
+                                        Select gender
+                                    </option>
+
+                                    <option value="Male">
+                                        Male
+                                    </option>
+
+                                    <option value="Female">
+                                        Female
+                                    </option>
+
+                                    <option value="Other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+                                <i
+                                    class="bi bi-chevron-down select-arrow"
+                                ></i>
+
+                            </div>
+
+                            <div class="invalid-feedback">
+                                Please select a gender.
+                            </div>
+
+                        </div>
+
+
+                        <!-- COUNTRY -->
+
+                        <div class="col-md-4">
+
+                            <label
+                                for="country"
+                                class="form-label"
+                            >
+                                Country
+                            </label>
+
+                            <div class="select-wrapper">
+
+                                <select
+                                    id="country"
+                                    name="country"
+                                    class="form-select"
+                                    required
+                                >
+
+                                    <option
+                                        value=""
+                                        selected
+                                        disabled
+                                    >
+                                        Select country
+                                    </option>
+
+                                    <option value="India">
+                                        🇮🇳 India
+                                    </option>
+
+                                    <option value="United States">
+                                        🇺🇸 United States
+                                    </option>
+
+                                    <option value="United Kingdom">
+                                        🇬🇧 United Kingdom
+                                    </option>
+
+                                    <option value="Canada">
+                                        🇨🇦 Canada
+                                    </option>
+
+                                    <option value="Australia">
+                                        🇦🇺 Australia
+                                    </option>
+
+                                    <option value="United Arab Emirates">
+                                        🇦🇪 United Arab Emirates
+                                    </option>
+
+                                </select>
+
+                                <i
+                                    class="bi bi-chevron-down select-arrow"
+                                ></i>
+
+                            </div>
+
+                            <div class="invalid-feedback">
+                                Please select a country.
+                            </div>
+
+                        </div>
+
+
+                        <!-- LOCATION -->
+
+                        <div class="col-md-12">
+
+                            <label
+                                for="locationFound"
+                                class="form-label"
+                            >
+                                Location Found
+                            </label>
+
+                            <input
+                                type="text"
+                                id="locationFound"
+                                name="location_found"
+                                class="form-control"
+                                placeholder="City / location where the child was found"
+                                maxlength="100"
+                                required
+                            >
+
+                            <div
+                                class="invalid-feedback"
+                                id="locationError"
+                            >
+                                Please enter a valid location.
+                            </div>
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <div class="col-md-12">
+
+                            <label
+                                for="description"
+                                class="form-label"
+                            >
+                                Description
+                            </label>
+
+                            <textarea
+                                id="description"
+                                name="description"
+                                class="form-control"
+                                rows="4"
+                                maxlength="500"
+                                placeholder="Relevant identifying details..."
+                            ></textarea>
+
+                            <div class="field-meta">
+
+                                <span>
+                                    Avoid entering unnecessary sensitive information.
+                                </span>
+
+                                <span>
+                                    <span id="descriptionCount">0</span>/500
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PHOTO
+            ================================================== -->
+
+            <div class="col-lg-4">
+
+                <div class="panel photo-panel case-card case-card-photo">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-camera me-2 text-success"></i>
+
+                        Identification Photograph
+
+                    </h5>
+
+
+                    <label
+                        for="foundPhoto"
+                        class="form-label"
+                    >
+                        Child Photograph
+                    </label>
+
+
+                    <input
+                        type="file"
+                        id="foundPhoto"
+                        name="photo"
+                        class="form-control"
+                        accept="image/jpeg,image/png,image/webp"
+                        required
+                    >
+
+
+                    <div
+                        id="foundPhotoPreview"
+                        class="photo-preview mt-3"
+                    >
+
+                        <i class="bi bi-image"></i>
+
+                        <span>
+                            Photo preview will appear here
+                        </span>
+
+                    </div>
+
+
+                    <small class="text-secondary d-block mt-3">
+
+                        A clear, front-facing photograph can improve
+                        the reliability of AI face matching.
+
+                    </small>
+
+                    <div
+                        id="photoError"
+                        class="validation-message"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 REPORTER INFORMATION
+            ================================================== -->
+
+            <div class="col-lg-12">
+
+                <div class="panel case-card case-card-reporter">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-person-lines-fill me-2 text-success"></i>
+
+                        Reporter Information
+
+                    </h5>
+
+
+                    <div class="row g-4">
+
+
+                        <!-- REPORTER NAME -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="reporterName"
+                                class="form-label"
+                            >
+                                Reporter Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="reporterName"
+                                name="reporter_name"
+                                class="form-control"
+                                placeholder="Enter reporter's full name"
+                                maxlength="100"
+                                autocomplete="off"
+                                required
+                            >
+
+                            <div
+                                class="invalid-feedback"
+                                id="reporterNameError"
+                            >
+                                Name can contain letters, spaces, hyphens
+                                and apostrophes only.
+                            </div>
+
+                        </div>
+
+
+                        <!-- REPORTER CONTACT -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="reporterContact"
+                                class="form-label"
+                            >
+                                Reporter Contact
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="reporterContact"
+                                name="reporter_contact"
+                                class="form-control"
+                                placeholder="Mobile number"
+                                inputmode="numeric"
+                                maxlength="15"
+                                autocomplete="off"
+                                required
+                            >
+
+                            <div
+                                class="invalid-feedback"
+                                id="reporterContactError"
+                            >
+                                Enter a valid contact number using digits only.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 DATE FOUND
+            ================================================== -->
+
+            <div class="col-lg-12">
+
+                <div class="panel case-card case-card-date">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-calendar-event me-2 text-success"></i>
+
+                        Date Found
+
+                    </h5>
+
+
+                    <div class="row g-3">
+
+
+                        <!-- DAY -->
+
+                        <div class="col-md-4">
+
+                            <label
+                                for="day"
+                                class="form-label"
+                            >
+                                Day
+                            </label>
+
+                            <div class="select-wrapper">
+
+                                <select
+                                    id="day"
+                                    name="day"
+                                    class="form-select"
+                                    required
+                                >
+
+                                    <option
+                                        value=""
+                                        selected
+                                        disabled
+                                    >
+                                        Select day
+                                    </option>
+
+                                    {% for day in range(1, 32) %}
+
+                                    <option value="{{ day }}">
+                                        {{ day }}
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                                <i
+                                    class="bi bi-chevron-down select-arrow"
+                                ></i>
+
+                            </div>
+
+                            <div class="invalid-feedback">
+                                Please select the day.
+                            </div>
+
+                        </div>
+
+
+                        <!-- MONTH -->
+
+                        <div class="col-md-4">
+
+                            <label
+                                for="month"
+                                class="form-label"
+                            >
+                                Month
+                            </label>
+
+                            <div class="select-wrapper">
+
+                                <select
+                                    id="month"
+                                    name="month"
+                                    class="form-select"
+                                    required
+                                >
+
+                                    <option
+                                        value=""
+                                        selected
+                                        disabled
+                                    >
+                                        Select month
+                                    </option>
+
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+
+                                </select>
+
+                                <i
+                                    class="bi bi-chevron-down select-arrow"
+                                ></i>
+
+                            </div>
+
+                            <div class="invalid-feedback">
+                                Please select the month.
+                            </div>
+
+                        </div>
+
+
+                        <!-- YEAR -->
+
+                        <div class="col-md-4">
+
+                            <label
+                                for="year"
+                                class="form-label"
+                            >
+                                Year
+                            </label>
+
+                            <input
+                                type="number"
+                                id="year"
+                                name="year"
+                                class="form-control"
+                                min="1900"
+                                max="2100"
+                                placeholder="YYYY"
+                                required
+                            >
+
+                            <div
+                                class="invalid-feedback"
+                                id="yearError"
+                            >
+                                Enter a valid year.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SUBMIT
+            ================================================== -->
+
+            <div class="col-12">
+
+                <div class="submit-area">
+
+                    <button
+                        type="submit"
+                        class="btn-main btn-green"
+                        id="submitButton"
+                    >
+
+                        <i class="bi bi-person-check-fill"></i>
+
+                        Register Found Case
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- =========================================================
+     PAGE-SPECIFIC STYLING
+========================================================= -->
+
+<style>
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+.select-wrapper {
+
+    position: relative;
+    width: 100%;
+}
+
+
+.select-wrapper .form-select {
+
+    width: 100%;
+
+    padding-right: 42px;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    cursor: pointer;
+
+    background-color: #fff;
+}
+
+
+.select-arrow {
+
+    position: absolute;
+
+    top: 50%;
+    right: 15px;
+
+    transform: translateY(-50%);
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    pointer-events: none;
+
+    transition: transform .2s ease;
+
+}
+
+
+.select-wrapper:focus-within .select-arrow {
+
+    color: #147dff;
+
+    transform:
+        translateY(-50%)
+        rotate(180deg);
+
+}
+
+
+/* =========================================================
+   PHOTO PREVIEW
+========================================================= */
+
+.photo-preview {
+
+    min-height: 180px;
+
+    padding: 25px;
+
+    border:
+        1px dashed #cbd5e1;
+
+    border-radius: 14px;
+
+    background: #f8fafc;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    color: #94a3b8;
+
+    text-align: center;
+
+    overflow: hidden;
+
+}
+
+
+.photo-preview i {
+
+    font-size: 35px;
+
+}
+
+
+.photo-preview img {
+
+    display: block;
+
+    width: 100%;
+
+    max-height: 230px;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+
+}
+
+
+/* =========================================================
+   FIELD META
+========================================================= */
+
+.field-meta {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 7px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+}
+
+
+/* =========================================================
+   VALIDATION
+========================================================= */
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+
+    border-color: #dc3545;
+
+}
+
+
+.form-control.is-valid,
+.form-select.is-valid {
+
+    border-color: #198754;
+
+}
+
+
+.validation-message {
+
+    color: #dc3545;
+
+    font-size: 11px;
+
+    margin-top: 8px;
+
+}
+
+
+.submit-area {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+}
+
+
+/* =========================================================
+   FILE INPUT
+========================================================= */
+
+input[type="file"] {
+
+    cursor: pointer;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 768px) {
+
+    .submit-area {
+
+        justify-content: stretch;
+
+    }
+
+    .submit-area .btn-main {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
+
+    .field-meta {
+
+        flex-direction: column;
+
+        gap: 3px;
+
+    }
+
+}
+
+</style>
+
+
+<!-- =========================================================
+     JAVASCRIPT VALIDATION
+========================================================= -->
+
+<script src="{{ url_for('static', filename='js/register-found.js') }}" defer></script>
+
+{% endblock %}

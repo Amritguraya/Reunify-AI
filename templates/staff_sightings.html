@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Sighting Reports | REUNIFY AI{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/operations.css', v='20261014-bg') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page operations-page">
+    <div class="page-header">
+        <div>
+            <div class="eyebrow">STAFF CASE MANAGEMENT</div>
+            <h1 class="page-title">Sighting Reports</h1>
+            <p class="page-description">Reports from the public directory. Contact details and report text are visible only to authorized staff.</p>
+        </div>
+    </div>
+
+    <section class="panel">
+        {% if sightings %}
+        <div class="table-wrap">
+            <table class="professional-table">
+                <thead><tr><th>Received</th><th>Case</th><th>Contact</th><th>Report</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody>
+                    {% for sighting in sightings %}
+                    <tr>
+                        <td>{{ sighting['submitted_at'] }}</td>
+                        <td><a href="{{ url_for('view_missing.missing_child_detail', child_id=sighting['child_id']) }}">{{ sighting['child_name'] }} · #{{ sighting['child_id'] }}</a></td>
+                        <td>{{ sighting['reporter_contact'] }}</td>
+                        <td style="white-space:pre-wrap;max-width:420px;">{{ sighting['details'] }}</td>
+                        <td>{{ sighting['status'] }}</td>
+                        <td>
+                            {% if sighting['status'] == 'New' %}
+                            <form method="post" action="{{ url_for('public_sightings.mark_sighting_reviewed', sighting_id=sighting['id']) }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button class="btn-main" type="submit">Mark reviewed</button>
+                            </form>
+                            {% else %}{{ sighting['reviewed_at'] }}{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-chat-left-text text-secondary" aria-hidden="true" style="font-size:48px;"></i>
+            <h2 class="h4 mt-3">No sighting reports yet</h2>
+            <p class="text-secondary">New reports connected to published cases will appear here.</p>
+        </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

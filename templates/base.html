@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+        Reunify AI
+        {% endblock %}
+    </title>
+
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- Bootstrap Icons -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+
+    <!-- Google Font -->
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+
+            min-height: 100%;
+
+            font-family: "Inter", sans-serif;
+
+            background: #f4f7fb;
+
+            color: #15243b;
+        }
+
+
+        body {
+            overflow-x: hidden;
+        }
+
+
+        a {
+            text-decoration: none;
+        }
+
+
+        /* =====================================================
+           APP LAYOUT
+        ===================================================== */
+
+        .app {
+            min-height: 100vh;
+
+            display: flex;
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+            position: fixed;
+
+            top: 0;
+            left: 0;
+            bottom: 0;
+
+            width: 285px;
+
+            z-index: 1000;
+
+            display: flex;
+            flex-direction: column;
+
+            padding: 25px 17px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #07182f 0%,
+                    #061427 100%
+                );
+
+            border-right: 1px solid
+                rgba(70, 140, 210, 0.18);
+
+            box-shadow:
+                8px 0 35px
+                rgba(0, 20, 50, 0.12);
+        }
+
+
+        /* =====================================================
+           BRAND
+        ===================================================== */
+
+        .brand {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 4px 9px 25px;
+        }
+
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            border-radius: 12px;
+
+            color: #ffffff;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #23b9ff,
+                    #365bdc
+                );
+
+            box-shadow:
+                0 8px 22px
+                rgba(25, 130, 240, 0.25);
+        }
+
+
+        .brand-logo i {
+            font-size: 20px;
+        }
+
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .brand-name {
+            color: #ffffff;
+
+            font-size: 16px;
+            font-weight: 800;
+
+            letter-spacing: 1px;
+        }
+
+
+        .brand-subtitle {
+            margin-top: 3px;
+
+            color: #5f7899;
+
+            font-size: 7px;
+            font-weight: 700;
+
+            letter-spacing: 1.4px;
+        }
+
+
+        /* =====================================================
+           SYSTEM STATUS
+        ===================================================== */
+
+        .sidebar-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            margin: 0 6px 23px;
+
+            padding: 10px 12px;
+
+            border-radius: 9px;
+
+            background:
+                rgba(20, 180, 145, 0.08);
+
+            border:
+                1px solid
+                rgba(30, 220, 175, 0.18);
+        }
+
+
+        .sidebar-status-dot {
+            width: 6px;
+            height: 6px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background: #25dfb1;
+
+            box-shadow:
+                0 0 9px
+                #25dfb1;
+        }
+
+
+        .sidebar-status-text {
+            color: #26dbae;
+
+            font-size: 8px;
+            font-weight: 800;
+
+            letter-spacing: 0.9px;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
+
+        .nav-section {
+            margin-bottom: 22px;
+        }
+
+
+        .nav-title {
+            padding: 0 12px 9px;
+
+            color: #4c6789;
+
+            font-size: 8px;
+            font-weight: 800;
+
+            letter-spacing: 1.4px;
+        }
+
+
+        .nav-link-custom {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            min-height: 46px;
+
+            margin: 3px 0;
+
+            padding: 0 13px;
+
+            color: #7189a8;
+
+            border-radius: 10px;
+
+            font-size: 10px;
+            font-weight: 600;
+
+            transition:
+                color 0.2s ease,
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
+
+
+        .nav-link-custom i {
+            width: 20px;
+
+            color: #5e789a;
+
+            font-size: 15px;
+
+            text-align: center;
+
+            transition: color 0.2s ease;
+        }
+
+
+        .nav-link-custom:hover {
+            color: #ffffff;
+
+            background:
+                rgba(35, 145, 235, 0.09);
+
+            transform: translateX(2px);
+        }
+
+
+        .nav-link-custom:hover i {
+            color: #32b7ff;
+        }
+
+
+        .nav-link-custom.active {
+            color: #ffffff;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(30, 145, 240, 0.22),
+                    rgba(30, 145, 240, 0.06)
+                );
+
+            border:
+                1px solid
+                rgba(45, 160, 245, 0.18);
+        }
+
+
+        .nav-link-custom.active i {
+            color: #31b8ff;
+        }
+
+
+        .nav-link-custom.active::before {
+            content: "";
+
+            position: absolute;
+
+            left: -17px;
+
+            top: 8px;
+            bottom: 8px;
+
+            width: 3px;
+
+            border-radius: 0 4px 4px 0;
+
+            background: #2bb8ff;
+
+            box-shadow:
+                0 0 10px
+                rgba(35, 180, 255, 0.7);
+        }
+
+
+        /* =====================================================
+           SIDEBAR BOTTOM
+        ===================================================== */
+
+        .sidebar-bottom {
+            margin-top: auto;
+
+            padding-top: 18px;
+
+            border-top:
+                1px solid
+                rgba(90, 130, 175, 0.13);
+        }
+
+
+        .security-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            padding: 11px 10px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255, 255, 255, 0.025);
+        }
+
+
+        .security-mini-icon {
+            width: 34px;
+            height: 34px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            color: #26dfb1;
+
+            background:
+                rgba(25, 215, 170, 0.1);
+        }
+
+
+        .security-mini-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .security-mini-content strong {
+            color: #9cb2cc;
+
+            font-size: 8px;
+        }
+
+
+        .security-mini-content span {
+            margin-top: 3px;
+
+            color: #4e6989;
+
+            font-size: 7px;
+        }
+
+
+        /* =====================================================
+           MAIN AREA
+        ===================================================== */
+
+        .main-wrapper {
+            width: calc(100% - 285px);
+
+            margin-left: 285px;
+
+            min-height: 100vh;
+
+            background:
+                #f4f7fb;
+        }
+
+
+        /* =====================================================
+           TOPBAR
+        ===================================================== */
+
+        .topbar {
+            height: 76px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 32px;
+
+            background: #ffffff;
+
+            border-bottom:
+                1px solid
+                #e5ebf3;
+        }
+
+
+        .topbar-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .topbar-kicker {
+            color: #8ca0b8;
+
+            font-size: 8px;
+            font-weight: 800;
+
+            letter-spacing: 1.3px;
+        }
+
+
+        .topbar-title {
+            margin-top: 5px;
+
+            color: #162b48;
+
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .topbar-status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            padding: 8px 11px;
+
+            border-radius: 18px;
+
+            color: #16a985;
+
+            background:
+                #effbf7;
+
+            border:
+                1px solid
+                #d4f3e9;
+
+            font-size: 8px;
+            font-weight: 800;
+        }
+
+
+        .topbar-status-dot {
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #20c89e;
+
+            box-shadow:
+                0 0 7px
+                rgba(20, 200, 155, 0.5);
+        }
+
+
+        .topbar-icon {
+            width: 36px;
+            height: 36px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            color: #617894;
+
+            background: #f5f8fc;
+
+            border:
+                1px solid
+                #e5ebf3;
+        }
+
+
+        /* =====================================================
+           PAGE CONTENT
+        ===================================================== */
+
+        .page-content {
+            min-height:
+                calc(100vh - 76px);
+
+            padding: 25px 30px 35px;
+        }
+
+
+        /* =====================================================
+           MOBILE BUTTON
+        ===================================================== */
+
+        .mobile-menu {
+            display: none;
+
+            width: 38px;
+            height: 38px;
+
+            align-items: center;
+            justify-content: center;
+
+            border: none;
+
+            border-radius: 9px;
+
+            color: #35516f;
+
+            background: #f2f6fa;
+
+            font-size: 18px;
+        }
+
+
+        /* =====================================================
+           MOBILE OVERLAY
+        ===================================================== */
+
+        .sidebar-overlay {
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 900;
+
+            background:
+                rgba(0, 15, 35, 0.55);
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1050px) {
+
+            .sidebar {
+                width: 245px;
+            }
+
+            .main-wrapper {
+                width: calc(100% - 245px);
+
+                margin-left: 245px;
+            }
+
+            .page-content {
+                padding: 22px;
+            }
+
+        }
+
+
+        @media (max-width: 850px) {
+
+            .sidebar {
+                transform:
+                    translateX(-100%);
+
+                transition:
+                    transform 0.25s ease;
+            }
+
+
+            .sidebar.mobile-open {
+                transform:
+                    translateX(0);
+            }
+
+
+            .sidebar-overlay.mobile-open {
+                display: block;
+            }
+
+
+            .main-wrapper {
+                width: 100%;
+
+                margin-left: 0;
+            }
+
+
+            .mobile-menu {
+                display: flex;
+            }
+
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+
+            .topbar-left {
+                flex: 1;
+
+                margin-left: 12px;
+            }
+
+
+            .topbar-kicker {
+                display: none;
+            }
+
+
+            .topbar-title {
+                font-size: 14px;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .page-content {
+                padding: 16px;
+            }
+
+
+            .topbar-status {
+                display: none;
+            }
+
+
+            .topbar-icon {
+                width: 34px;
+                height: 34px;
+            }
+
+        }
+
+    </style>
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css', v='20261014-bg') }}">
+
+    {% block head %}
+    {% endblock %}
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <div class="brand-logo">
+
+                <i class="bi bi-shield-plus"></i>
+
+            </div>
+
+
+            <div class="brand-text">
+
+                <div class="brand-name">
+                    REUNIFY AI
+                </div>
+
+                <div class="brand-subtitle">
+                    CHILD SAFETY SYSTEM
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="sidebar-status">
+
+            <span class="sidebar-status-dot"></span>
+
+            <span class="sidebar-status-text">
+                PLATFORM READY
+            </span>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <div class="nav-section">
+
+            <div class="nav-title">
+                COMMAND CENTER
+            </div>
+
+
+            <a
+                href="/"
+                class="nav-link-custom{% if request.path == '/' %} active{% endif %}"
+                {% if request.path == '/' %}aria-current="page"{% endif %}
+            >
+
+                <i class="bi bi-grid-1x2-fill"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <div class="nav-section">
+
+            <div class="nav-title">
+                CASE MANAGEMENT
+            </div>
+
+
+            <a
+                href="/register-missing"
+                class="nav-link-custom{% if request.path.startswith('/register-missing') %} active{% endif %}"
+                {% if request.path.startswith('/register-missing') %}aria-current="page"{% endif %}
+            >
+
+                <i class="bi bi-person-plus-fill"></i>
+
+                <span>
+                    Register Missing
+                </span>
+
+            </a>
+
+
+            <a
+                href="/register_found"
+                class="nav-link-custom{% if request.path.startswith('/register_found') %} active{% endif %}"
+                {% if request.path.startswith('/register_found') %}aria-current="page"{% endif %}
+            >
+
+                <i class="bi bi-person-check-fill"></i>
+
+                <span>
+                    Register Found
+                </span>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('view_missing.view_missing') if g.staff_authenticated else url_for('public_directory.missing_children') }}"
+                class="nav-link-custom{% if request.path.startswith('/view_missing') or request.path.startswith('/missing-children') %} active{% endif %}"
+                {% if request.path.startswith('/view_missing') or request.path.startswith('/missing-children') %}aria-current="page"{% endif %}
+            >
+
+                <i class="bi bi-person-x-fill"></i>
+
+                <span>
+                    Missing Children
+                </span>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('view_found.view_found') if g.staff_authenticated else url_for('public_directory.found_children') }}"
+                class="nav-link-custom{% if request.path.startswith('/view_found') or request.path.startswith('/found-children') %} active{% endif %}"
+                {% if request.path.startswith('/view_found') or request.path.startswith('/found-children') %}aria-current="page"{% endif %}
+            >
+
+                <i class="bi bi-people-fill"></i>
+
+                <span>
+                    Found Children
+                </span>
+
+            </a>
+
+        </div>
+
+
+        {% if g.staff_authenticated %}
+        <div class="nav-section">
+
+            <div class="nav-title">
+                INTELLIGENCE
+            </div>
+
+
+            <a
+                href="/ai_match"
+                class="nav-link-custom{% if request.path.startswith('/ai_match') %} active{% endif %}"
+                {% if request.path.startswith('/ai_match') %}aria-current="page"{% endif %}
+            >
+
+                <i class="bi bi-cpu-fill"></i>
+
+                <span>
+                    AI Matching
+                </span>
+
+            </a>
+
+
+            <a
+                href="/match-history"
+                class="nav-link-custom{% if request.path.startswith('/match-history') or request.path.startswith('/verify-match') %} active{% endif %}"
+                {% if request.path.startswith('/match-history') or request.path.startswith('/verify-match') %}aria-current="page"{% endif %}
+            >
+
+                <i class="bi bi-clock-history"></i>
+
+                <span>
+                    Match History
+                </span>
+
+            </a>
+
+
+            <a
+                href="/reports"
+                class="nav-link-custom{% if request.path.startswith('/reports') %} active{% endif %}"
+                {% if request.path.startswith('/reports') %}aria-current="page"{% endif %}
+            >
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                <span>
+                    Reports
+                </span>
+
+            </a>
+
+            <a
+                href="{{ url_for('public_sightings.review_sightings') }}"
+                class="nav-link-custom{% if request.path.startswith('/sightings') %} active{% endif %}"
+                {% if request.path.startswith('/sightings') %}aria-current="page"{% endif %}
+            >
+
+                <i class="bi bi-chat-left-text-fill"></i>
+
+                <span>
+                    Sighting Reports
+                </span>
+
+            </a>
+
+        </div>
+        {% endif %}
+
+
+        <!-- BOTTOM -->
+
+        <div class="sidebar-bottom">
+
+            <div class="security-mini">
+
+                <div class="security-mini-icon">
+
+                    <i class="bi bi-shield-lock-fill"></i>
+
+                </div>
+
+
+                <div class="security-mini-content">
+
+                    <strong>
+                        Protected Environment
+                    </strong>
+
+                    <span>
+                        Authorized access only
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- OVERLAY -->
+
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+    ></div>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="main-wrapper{% if request.path.startswith('/ai_match') or request.path.startswith('/reports') %} feature-surface{% endif %}">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+
+            <button
+                class="mobile-menu"
+                id="mobileMenu"
+                type="button"
+                aria-label="Open navigation menu"
+                aria-controls="sidebar"
+                aria-expanded="false"
+            >
+
+                <i class="bi bi-list"></i>
+
+            </button>
+
+
+            <div class="topbar-left">
+
+                <div class="topbar-kicker">
+                    CHILD REUNIFICATION SYSTEM
+                </div>
+
+                <div class="topbar-title">
+
+                    {% block page_title %}
+                    Command Center
+                    {% endblock %}
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+
+                <div class="topbar-status" role="status" aria-label="Application status: online">
+
+                    <span class="topbar-status-dot"></span>
+
+                    SERVICE AVAILABLE
+
+                </div>
+
+
+                <div class="workspace-pill">
+                    <span class="workspace-avatar" aria-hidden="true">
+                        <i class="bi bi-person-workspace"></i>
+                    </span>
+                    <span class="workspace-copy">
+                        <strong>{{ "Staff workspace" if g.staff_authenticated else "Public directory" }}</strong>
+                        <small>{{ "Case management" if g.staff_authenticated else "Find a child" }}</small>
+                    </span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE -->
+
+        <div class="page-content">
+
+            {% with notices = get_flashed_messages(with_categories=true) %}
+                {% if notices %}
+                    <div class="mb-3" aria-live="polite">
+                        {% for category, notice in notices %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="status">
+                                {{ notice }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     BOOTSTRAP JS
+====================================================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+
+<!-- =====================================================
+     MOBILE SIDEBAR
+====================================================== -->
+
+<script src="{{ url_for('static', filename='js/site.js', v='20261014-bg') }}" defer></script>
+
+
+{% block scripts %}
+{% endblock %}
+
+
+</body>
+
+</html>

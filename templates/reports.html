@@ -1,0 +1,1122 @@
+{% extends "base.html" %}
+
+{% block title %}Reports | REUNIFY AI{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/operations.css', v='20261014-bg') }}">
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+.report-hero {
+    background:
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(20,125,255,.18),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #0b1628,
+            #102642
+        );
+
+    color: white;
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 26px;
+    position: relative;
+    overflow: hidden;
+}
+
+.report-hero::after {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    right: -80px;
+    top: -90px;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 50%;
+}
+
+.report-hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.report-eyebrow {
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #4ca4ff;
+    margin-bottom: 10px;
+}
+
+.report-title {
+    font-size: 34px;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -1px;
+}
+
+.report-description {
+    color: #9eabc0;
+    font-size: 13px;
+    margin-top: 8px;
+    max-width: 700px;
+    line-height: 1.7;
+}
+
+.report-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-top: 18px;
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    background: rgba(255,255,255,.07);
+
+    color: #cbd5e1;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   STAT CARDS
+   ========================================================= */
+
+.stat-card {
+
+    background: white;
+
+    border: 1px solid #e6ebf2;
+
+    border-radius: 18px;
+
+    padding: 22px;
+
+    height: 100%;
+
+    box-shadow:
+        0 8px 25px rgba(15,31,55,.04);
+
+    transition: .2s ease;
+}
+
+.stat-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 30px rgba(15,31,55,.08);
+}
+
+.stat-icon {
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 11px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 19px;
+
+    margin-bottom: 15px;
+}
+
+.stat-label {
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    color: #8491a4;
+}
+
+.stat-value {
+
+    font-size: 29px;
+
+    font-weight: 800;
+
+    color: #172033;
+
+    margin-top: 4px;
+}
+
+.icon-blue {
+    background: #edf5ff;
+    color: #147dff;
+}
+
+.icon-green {
+    background: #e7f9f1;
+    color: #139b67;
+}
+
+.icon-yellow {
+    background: #fff7df;
+    color: #c48a00;
+}
+
+.icon-red {
+    background: #fff0f1;
+    color: #d43c49;
+}
+
+
+/* =========================================================
+   REPORT PANEL
+   ========================================================= */
+
+.report-panel {
+
+    background: white;
+
+    border: 1px solid #e6ebf2;
+
+    border-radius: 20px;
+
+    padding: 26px;
+
+    margin-top: 26px;
+
+    box-shadow:
+        0 8px 30px rgba(15,31,55,.04);
+}
+
+.panel-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.panel-heading h3 {
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    margin: 0;
+}
+
+.panel-heading span {
+
+    font-size: 11px;
+
+    color: #8a98ac;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.table-wrap {
+
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.report-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 900px;
+}
+
+.report-table th {
+
+    background: #f7f9fc;
+
+    color: #65758b;
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    padding: 14px;
+
+    text-align: left;
+
+    border-bottom:
+        1px solid #e4eaf1;
+}
+
+.report-table td {
+
+    padding: 15px 14px;
+
+    border-bottom:
+        1px solid #edf1f5;
+
+    font-size: 12px;
+
+    color: #354359;
+
+    vertical-align: middle;
+}
+
+.report-table tr:last-child td {
+
+    border-bottom: none;
+}
+
+.report-table tr:hover {
+
+    background: #fafcff;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 6px 10px;
+
+    border-radius: 30px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+.status-verified {
+
+    background: #d9f8eb;
+
+    color: #08764c;
+}
+
+.status-pending {
+
+    background: #fff3cd;
+
+    color: #9a6b00;
+}
+
+.status-rejected {
+
+    background: #ffe1e4;
+
+    color: #a51e2a;
+}
+
+
+/* =========================================================
+   CHILD NAME
+   ========================================================= */
+
+.child-name {
+
+    font-weight: 800;
+
+    color: #172033;
+}
+
+.child-details {
+
+    margin-top: 3px;
+
+    font-size: 10px;
+
+    color: #8a98ac;
+}
+
+
+/* =========================================================
+   CONFIDENCE
+   ========================================================= */
+
+.confidence-value {
+
+    font-weight: 800;
+
+    color: #147dff;
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.empty-report {
+
+    text-align: center;
+
+    padding: 45px 20px;
+}
+
+.empty-report i {
+
+    font-size: 42px;
+
+    color: #cbd5e1;
+}
+
+.empty-report h4 {
+
+    margin-top: 14px;
+
+    font-weight: 800;
+}
+
+.empty-report p {
+
+    color: #8a98ac;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width: 700px) {
+
+    .report-hero {
+
+        padding: 24px;
+    }
+
+    .report-title {
+
+        font-size: 28px;
+    }
+
+}
+
+</style>
+
+
+<div class="page operations-page reports-page">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="report-hero">
+
+        <div class="report-hero-content">
+
+            <div class="report-eyebrow">
+                INTELLIGENCE & ANALYTICS
+            </div>
+
+            <h1 class="report-title">
+                System Reports
+            </h1>
+
+            <div class="report-description">
+
+                Operational overview of missing-child cases,
+                found-child registrations, AI-generated matches
+                and verification outcomes.
+
+            </div>
+
+            <div class="report-date">
+
+                <i class="bi bi-calendar3"></i>
+
+                Report generated:
+                {{ current_date }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN STATISTICS
+    ====================================================== -->
+
+    <div class="row g-4">
+
+
+        <!-- MISSING -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div class="stat-icon icon-blue">
+
+                    <i class="bi bi-person-x-fill"></i>
+
+                </div>
+
+                <div class="stat-label">
+                    Missing Cases
+                </div>
+
+                <div class="stat-value">
+                    {{ missing }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOUND -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div class="stat-icon icon-green">
+
+                    <i class="bi bi-person-check-fill"></i>
+
+                </div>
+
+                <div class="stat-label">
+                    Found Cases
+                </div>
+
+                <div class="stat-value">
+                    {{ found }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MATCHES -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div class="stat-icon icon-yellow">
+
+                    <i class="bi bi-cpu-fill"></i>
+
+                </div>
+
+                <div class="stat-label">
+                    AI Matches
+                </div>
+
+                <div class="stat-value">
+                    {{ matches }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PENDING -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div class="stat-icon icon-red">
+
+                    <i class="bi bi-hourglass-split"></i>
+
+                </div>
+
+                <div class="stat-label">
+                    Pending Verification
+                </div>
+
+                <div class="stat-value">
+                    {{ pending }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         VERIFICATION OVERVIEW
+    ====================================================== -->
+
+    <div class="report-panel">
+
+        <div class="panel-heading">
+
+            <div>
+
+                <h3>
+                    Verification Overview
+                </h3>
+
+                <span>
+                    AI results requiring human review
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <!-- VERIFIED -->
+
+            <div class="col-md-4">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon icon-green">
+
+                        <i class="bi bi-shield-check"></i>
+
+                    </div>
+
+                    <div class="stat-label">
+                        Verified Matches
+                    </div>
+
+                    <div class="stat-value">
+                        {{ verified }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PENDING -->
+
+            <div class="col-md-4">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon icon-yellow">
+
+                        <i class="bi bi-shield-exclamation"></i>
+
+                    </div>
+
+                    <div class="stat-label">
+                        Pending Review
+                    </div>
+
+                    <div class="stat-value">
+                        {{ pending }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- REJECTED -->
+
+            <div class="col-md-4">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon icon-red">
+
+                        <i class="bi bi-shield-x"></i>
+
+                    </div>
+
+                    <div class="stat-label">
+                        Rejected Matches
+                    </div>
+
+                    <div class="stat-value">
+                        {{ rejected }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         EXACT AI MATCH REPORT
+    ====================================================== -->
+
+    <div class="report-panel">
+
+        <div class="panel-heading">
+
+            <div>
+
+                <h3>
+                    AI Match Activity
+                </h3>
+
+                <span>
+                    Exact records generated by the matching engine
+                </span>
+
+            </div>
+
+        </div>
+
+
+        {% if report_matches %}
+
+
+        <div class="table-wrap">
+
+            <table class="report-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Match ID
+                        </th>
+
+                        <th>
+                            Missing Child
+                        </th>
+
+                        <th>
+                            Missing Details
+                        </th>
+
+                        <th>
+                            Found Child
+                        </th>
+
+                        <th>
+                            Found Details
+                        </th>
+
+                        <th>
+                            Confidence
+                        </th>
+
+                        <th>
+                            Match Date
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                {% for match in report_matches %}
+
+
+                    <tr>
+
+
+                        <!-- MATCH ID -->
+
+                        <td>
+
+                            <strong>
+                                #{{ match["match_id"] }}
+                            </strong>
+
+                        </td>
+
+
+                        <!-- MISSING CHILD -->
+
+                        <td>
+
+                            <div class="child-name">
+
+                                {{ match["missing_name"]
+                                   if match["missing_name"]
+                                   else "Unknown" }}
+
+                            </div>
+
+                            <div class="child-details">
+
+                                Case #{{ match["missing_child_id"] }}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- MISSING DETAILS -->
+
+                        <td>
+
+                            <div>
+
+                                Age:
+                                {{ match["missing_age"]
+                                   if match["missing_age"] is not none
+                                   else "N/A" }}
+
+                            </div>
+
+                            <div>
+
+                                Gender:
+                                {{ match["missing_gender"]
+                                   if match["missing_gender"]
+                                   else "N/A" }}
+
+                            </div>
+
+                            <div>
+
+                                City:
+                                {{ match["missing_city"]
+                                   if match["missing_city"]
+                                   else "N/A" }}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- FOUND CHILD -->
+
+                        <td>
+
+                            <div class="child-name">
+
+                                Found Case
+                                #{{ match["found_child_id"] }}
+
+                            </div>
+
+                            <div class="child-details">
+
+                                {{ match["found_location"]
+                                   if match["found_location"]
+                                   else "Unknown location" }}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- FOUND DETAILS -->
+
+                        <td>
+
+                            <div>
+
+                                Estimated Age:
+                                {{ match["found_age"]
+                                   if match["found_age"] is not none
+                                   else "N/A" }}
+
+                            </div>
+
+                            <div>
+
+                                Gender:
+                                {{ match["found_gender"]
+                                   if match["found_gender"]
+                                   else "N/A" }}
+
+                            </div>
+
+                            <div>
+
+                                Country:
+                                {{ match["found_country"]
+                                   if match["found_country"]
+                                   else "N/A" }}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- CONFIDENCE -->
+
+                        <td>
+
+                            <span class="confidence-value">
+
+                                {{ "%.2f"|format(
+                                    (match["confidence"] or 0) * 100
+                                ) }}%
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- DATE -->
+
+                        <td>
+
+                            {{ match["match_date"]
+                               if match["match_date"]
+                               else "N/A" }}
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+
+                            {% if match["verification_status"] == "Verified" %}
+
+                                <span class="status status-verified">
+
+                                    <i class="bi bi-check-circle-fill"></i>
+
+                                    Verified
+
+                                </span>
+
+
+                            {% elif match["verification_status"] == "Rejected" %}
+
+                                <span class="status status-rejected">
+
+                                    <i class="bi bi-x-circle-fill"></i>
+
+                                    Rejected
+
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="status status-pending">
+
+                                    <i class="bi bi-clock-fill"></i>
+
+                                    Pending
+
+                                </span>
+
+                            {% endif %}
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="empty-report">
+
+            <i class="bi bi-bar-chart-line"></i>
+
+            <h4>
+                No Match Activity Yet
+            </h4>
+
+            <p>
+
+                AI matching results will appear here once the
+                system processes registered cases.
+
+            </p>
+
+        </div>
+
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         SYSTEM SUMMARY
+    ====================================================== -->
+
+    <div class="report-panel">
+
+        <div class="panel-heading">
+
+            <div>
+
+                <h3>
+                    System Summary
+                </h3>
+
+                <span>
+                    Current REUNIFY AI case-management state
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table class="report-table">
+
+                <tbody>
+
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                Missing Child Records
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ missing }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                Found Child Records
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ found }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                AI Candidate Matches
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ matches }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                Verified Reunification Candidates
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ verified }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                Pending Human Verification
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ pending }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                Rejected AI Matches
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ rejected }}
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

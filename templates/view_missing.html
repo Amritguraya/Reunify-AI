@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+
+{% block title %}Missing Children | REUNIFY AI{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/operations.css', v='20261014-bg') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page operations-page">
+
+    <div class="page-header">
+
+        <div>
+
+            <div class="eyebrow">
+                CASE MANAGEMENT
+            </div>
+
+            <h1 class="page-title">
+                Missing Children
+            </h1>
+
+            <div class="page-description">
+                Registered missing-child cases and AI reunification status.
+            </div>
+
+        </div>
+
+        <a href="/register-missing" class="btn-main">
+            <i class="bi bi-person-plus-fill"></i>
+            Register Missing Child
+        </a>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="records-heading">
+            <div class="records-heading-copy">
+                <span class="records-kicker">CASE REGISTER</span>
+                <h2>Missing child cases</h2>
+                <p>Open records and their current identification status.</p>
+            </div>
+            <div class="records-count">
+                <i class="bi bi-person-x"></i>
+                <strong>{{ children|length }}</strong>
+                <span>records</span>
+            </div>
+        </div>
+
+        {% if children %}
+
+        <div class="table-wrap">
+
+            <table class="professional-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Photo</th>
+                        <th>Child</th>
+                        <th>Age / Gender</th>
+                        <th>Location</th>
+                        <th>Missing Date</th>
+                        <th>AI Match</th>
+                        <th>Verification</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for child in children %}
+
+                    <tr>
+
+                        <!-- PHOTO -->
+
+                        <td>
+                            <a class="table-photo-link" href="{{ url_for('view_missing.missing_child_detail', child_id=child['id']) }}" aria-label="Open full case for missing child #{{ child['id'] }}">
+
+                            {% if child["photo_path"] %}
+
+                                <img
+                                    src="{{ url_for(
+                                        'static',
+                                        filename=child['photo_path'].replace('static/', '')
+                                    ) }}"
+                                    alt="Photo of {{ child['name'] }}"
+                                    style="
+                                        width:58px;
+                                        height:58px;
+                                        object-fit:cover;
+                                        border-radius:14px;
+                                        border:1px solid #e2e8f0;
+                                    "
+                                >
+
+                            {% else %}
+
+                                <div style="
+                                    width:58px;
+                                    height:58px;
+                                    border-radius:14px;
+                                    background:#f1f5f9;
+                                    display:flex;
+                                    align-items:center;
+                                    justify-content:center;
+                                    color:#94a3b8;
+                                    font-size:22px;
+                                ">
+                                    <i class="bi bi-person"></i>
+                                </div>
+
+                            {% endif %}
+
+                        
+                            </a>
+                        </td>
+
+
+                        <!-- CHILD -->
+
+                        <td>
+
+                            <div style="
+                                font-weight:800;
+                                color:#172033;
+                            ">
+                                <a class="table-child-name" href="{{ url_for('view_missing.missing_child_detail', child_id=child['id']) }}">{{ child["name"] }}</a>
+                            </div>
+
+                            <div style="
+                                font-size:11px;
+                                color:#8a98ac;
+                                margin-top:4px;
+                            ">
+                                Case #{{ child["id"] }}
+                            </div>
+
+                        <a class="table-child-open" href="{{ url_for('view_missing.missing_child_detail', child_id=child['id']) }}">Open full case <i class="bi bi-arrow-up-right"></i></a>
+
+                        </td>
+
+
+                        <!-- AGE / GENDER -->
+
+                        <td>
+
+                            <div>
+                                {{ child["age"] }} years
+                            </div>
+
+                            <div style="
+                                font-size:11px;
+                                color:#8a98ac;
+                                margin-top:3px;
+                            ">
+                                {{ child["gender"] }}
+                            </div>
+
+                        </td>
+
+
+                        <!-- LOCATION -->
+
+                        <td>
+
+                            <div>
+                                {{ child["city"] }}
+                            </div>
+
+                            <div style="
+                                font-size:11px;
+                                color:#8a98ac;
+                                margin-top:3px;
+                            ">
+                                {{ child["parent_name"] }}
+                            </div>
+
+                        </td>
+
+
+                        <!-- DATE -->
+
+                        <td>
+                            {{ child["missing_date"] }}
+                        </td>
+
+
+                        <!-- AI MATCH -->
+
+                        <td>
+
+                            {% if child["found_child_id"] %}
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#147dff;
+                                ">
+
+                                    {{ "%.2f"|format((child["confidence"] or 0) * 100) }}%
+
+                                </div>
+
+                                <div style="
+                                    font-size:10px;
+                                    color:#8a98ac;
+                                    margin-top:3px;
+                                ">
+                                    AI similarity
+                                </div>
+
+                            {% else %}
+
+                                <span style="
+                                    color:#94a3b8;
+                                    font-size:12px;
+                                ">
+                                    No match
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- VERIFICATION -->
+
+                        <td>
+
+                            {% if child["verification_status"] == "Pending" %}
+
+                                <a
+                                    href="/verify-match/{{ child['match_id'] }}"
+                                    class="badge-status pending"
+                                    style="
+                                        text-decoration:none;
+                                        cursor:pointer;
+                                    "
+                                >
+                                    <i class="bi bi-shield-exclamation"></i>
+                                    Verify
+                                </a>
+
+
+                            {% elif child["verification_status"] == "Verified" %}
+
+                                <span class="badge-status verified">
+
+                                    <i class="bi bi-shield-check"></i>
+                                    Verified
+
+                                </span>
+
+
+                            {% elif child["verification_status"] == "Rejected" %}
+
+                                <span class="badge-status rejected">
+
+                                    <i class="bi bi-x-circle"></i>
+                                    Rejected
+
+                                </span>
+
+
+                            {% else %}
+
+                                <span style="
+                                    color:#94a3b8;
+                                    font-size:11px;
+                                ">
+                                    Awaiting AI match
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+            <div class="text-center py-5">
+
+                <i
+                    class="bi bi-person-x"
+                    style="
+                        font-size:50px;
+                        color:#cbd5e1;
+                    "
+                ></i>
+
+                <h4 class="mt-3">
+                    No Missing Children
+                </h4>
+
+                <p class="text-secondary">
+                    No missing-child records have been registered yet.
+                </p>
+
+                <a href="/register-missing" class="btn-main">
+                    <i class="bi bi-person-plus-fill"></i>
+                    Register First Case
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

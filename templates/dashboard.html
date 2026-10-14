@@ -1,0 +1,2437 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard · Reunify AI
+{% endblock %}
+
+{% block page_title %}
+Command Center
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.dashboard {
+    width: 100%;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero-panel {
+    position: relative;
+    min-height: 275px;
+    padding: 34px 36px;
+    margin-bottom: 22px;
+    overflow: hidden;
+
+    border: 1px solid rgba(35, 155, 255, 0.55);
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(10, 42, 82, 0.98),
+            rgba(5, 25, 55, 0.98)
+        );
+
+    box-shadow:
+        inset 0 0 50px rgba(0, 120, 255, 0.04);
+}
+
+
+/* background grid */
+
+.hero-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(45, 150, 255, 0.07) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(45, 150, 255, 0.07) 1px,
+            transparent 1px
+        );
+
+    background-size: 28px 28px;
+
+    pointer-events: none;
+}
+
+
+/* hero content */
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+
+    max-width: 590px;
+}
+
+.eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #29dfb3;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+}
+
+.live-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #29dfb3;
+
+    box-shadow:
+        0 0 12px #29dfb3;
+}
+
+.hero-content h1 {
+    margin: 17px 0 12px;
+
+    color: #ffffff;
+
+    font-size: 40px;
+    line-height: 1.08;
+
+    font-weight: 800;
+
+    letter-spacing: -1.5px;
+}
+
+.hero-content h1 span {
+    display: block;
+    color: #18b9f5;
+}
+
+.hero-content p {
+    max-width: 570px;
+
+    margin: 0;
+
+    color: #91a8c6;
+
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    margin-top: 21px;
+}
+
+.hero-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: #7591b3;
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.hero-meta i {
+    color: #32b8ff;
+}
+
+
+/* =========================================================
+   HERO AI FACE
+========================================================= */
+
+.hero-face-scanner {
+    position: absolute;
+
+    right: 315px;
+    top: 25px;
+
+    width: 210px;
+    height: 220px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 5;
+}
+
+
+/* circular scanner */
+
+.hero-ring {
+    position: absolute;
+
+    width: 210px;
+    height: 210px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(30, 178, 255, 0.18);
+
+    animation: ringPulse 3s ease-in-out infinite;
+}
+
+.hero-ring.ring-two {
+    width: 170px;
+    height: 170px;
+
+    border-style: dashed;
+
+    border-color: rgba(30, 178, 255, 0.28);
+
+    animation-delay: 0.4s;
+}
+
+.hero-ring.ring-three {
+    width: 135px;
+    height: 135px;
+
+    border-color: rgba(30, 178, 255, 0.42);
+
+    animation-delay: 0.8s;
+}
+
+@keyframes ringPulse {
+
+    0%,
+    100% {
+        opacity: 0.55;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.04);
+    }
+}
+
+
+/* face */
+
+.hero-face {
+    position: relative;
+
+    width: 112px;
+    height: 150px;
+
+    border-radius:
+        48%
+        48%
+        46%
+        46%;
+
+    background:
+        linear-gradient(
+            155deg,
+            #d9f1f5 0%,
+            #9bc6d2 48%,
+            #54899d 100%
+        );
+
+    border: 1px solid rgba(100, 220, 255, 0.45);
+
+    box-shadow:
+        0 0 35px rgba(30, 190, 255, 0.24);
+
+    z-index: 8;
+}
+
+
+/* hair */
+
+.hero-hair {
+    position: absolute;
+
+    top: -6px;
+    left: -2px;
+
+    width: 116px;
+    height: 52px;
+
+    border-radius:
+        55%
+        55%
+        35%
+        35%;
+
+    background:
+        linear-gradient(
+            180deg,
+            #152b50,
+            #223e68
+        );
+}
+
+
+/* eyes */
+
+.hero-eye {
+    position: absolute;
+
+    top: 69px;
+
+    width: 18px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #071a30;
+}
+
+.hero-eye.left {
+    left: 27px;
+}
+
+.hero-eye.right {
+    right: 27px;
+}
+
+
+/* nose */
+
+.hero-nose {
+    position: absolute;
+
+    top: 79px;
+    left: 53px;
+
+    width: 7px;
+    height: 21px;
+
+    border-right: 1px solid #557e8b;
+}
+
+
+/* mouth */
+
+.hero-mouth {
+    position: absolute;
+
+    left: 39px;
+    bottom: 29px;
+
+    width: 34px;
+    height: 10px;
+
+    border-bottom: 2px solid #4d7886;
+
+    border-radius: 50%;
+}
+
+
+/* scan line */
+
+.hero-scan-line {
+    position: absolute;
+
+    left: 32px;
+    right: 32px;
+
+    height: 2px;
+
+    z-index: 15;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #28dcff,
+            transparent
+        );
+
+    box-shadow:
+        0 0 14px #28dcff;
+
+    animation:
+        heroScan 2.4s ease-in-out infinite;
+}
+
+@keyframes heroScan {
+
+    0% {
+        top: 35px;
+    }
+
+    50% {
+        top: 190px;
+    }
+
+    100% {
+        top: 35px;
+    }
+}
+
+
+/* face brackets */
+
+.face-bracket {
+    position: absolute;
+
+    width: 28px;
+    height: 28px;
+
+    z-index: 20;
+
+    border-color: #d9f6ff;
+}
+
+.face-bracket.tl {
+    top: 28px;
+    left: 28px;
+
+    border-top: 2px solid;
+    border-left: 2px solid;
+}
+
+.face-bracket.tr {
+    top: 28px;
+    right: 28px;
+
+    border-top: 2px solid;
+    border-right: 2px solid;
+}
+
+.face-bracket.bl {
+    bottom: 25px;
+    left: 28px;
+
+    border-bottom: 2px solid;
+    border-left: 2px solid;
+}
+
+.face-bracket.br {
+    bottom: 25px;
+    right: 28px;
+
+    border-bottom: 2px solid;
+    border-right: 2px solid;
+}
+
+
+/* =========================================================
+   HERO ACTION
+========================================================= */
+
+.hero-action {
+    position: absolute;
+
+    right: 30px;
+    top: 92px;
+
+    z-index: 30;
+}
+
+.ai-button {
+    width: 285px;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 18px;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #209df4,
+            #554be1
+        );
+
+    box-shadow:
+        0 15px 35px rgba(42, 92, 220, 0.32);
+
+    transition: 0.2s ease;
+}
+
+.ai-button:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.ai-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    background: rgba(255,255,255,0.17);
+
+    font-size: 21px;
+}
+
+.ai-button-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-button-text strong {
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.ai-button-text small {
+    margin-top: 4px;
+
+    color: rgba(255,255,255,0.7);
+
+    font-size: 9px;
+}
+
+.arrow-icon {
+    margin-left: auto;
+
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.metrics-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+.metric-card {
+    position: relative;
+
+    min-height: 148px;
+
+    padding: 19px;
+
+    overflow: hidden;
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #09264d,
+            #071a38
+        );
+
+    border: 1px solid rgba(55,145,245,0.4);
+}
+
+.metric-card.green-card {
+    border-color: rgba(0,220,175,0.5);
+}
+
+.metric-card.purple-card {
+    border-color: rgba(135,80,245,0.55);
+}
+
+.metric-card.orange-card {
+    border-color: rgba(255,165,25,0.55);
+}
+
+.metric-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.metric-icon {
+    width: 49px;
+    height: 49px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 19px;
+}
+
+.metric-icon.blue {
+    color: white;
+    background:
+        radial-gradient(
+            circle,
+            #2d9fff,
+            #0754aa
+        );
+
+    box-shadow:
+        0 0 25px rgba(40,150,255,0.25);
+}
+
+.metric-icon.green {
+    color: white;
+    background:
+        radial-gradient(
+            circle,
+            #28e5b4,
+            #008e75
+        );
+}
+
+.metric-icon.purple {
+    color: white;
+    background:
+        radial-gradient(
+            circle,
+            #a86cff,
+            #5227b8
+        );
+}
+
+.metric-icon.orange {
+    color: white;
+    background:
+        radial-gradient(
+            circle,
+            #ffc450,
+            #ad6900
+        );
+}
+
+.metric-status {
+    color: #42adff;
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.green-status {
+    color: #28dfb0;
+}
+
+.purple-status {
+    color: #ad7aff;
+}
+
+.orange-status {
+    color: #ffb538;
+}
+
+.metric-label {
+    margin-top: 14px;
+
+    color: #47aaf4;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.metric-value {
+    margin-top: 2px;
+
+    color: white;
+
+    font-size: 35px;
+    font-weight: 800;
+}
+
+.metric-note {
+    margin-top: 6px;
+
+    color: #7893b4;
+
+    font-size: 9px;
+}
+
+.metric-note i {
+    margin-right: 4px;
+}
+
+
+/* =========================================================
+   MAIN GRID
+========================================================= */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+        1.45fr
+        0.9fr;
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+.panel {
+    padding: 22px;
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #09264d,
+            #071a38
+        );
+
+    border: 1px solid rgba(55,145,245,0.4);
+}
+
+.panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    margin-bottom: 19px;
+}
+
+.panel-kicker {
+    color: #36aafa;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+}
+
+.panel h3 {
+    margin: 5px 0 0;
+
+    color: white;
+
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.panel-description {
+    margin: 5px 0 0;
+
+    color: #708bad;
+
+    font-size: 9px;
+}
+
+.engine-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 7px 12px;
+
+    color: #22ddb0;
+
+    border: 1px solid rgba(0,220,175,0.4);
+    border-radius: 20px;
+
+    font-size: 8px;
+    font-weight: 800;
+}
+
+.engine-status span {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #22ddb0;
+
+    box-shadow: 0 0 9px #22ddb0;
+}
+
+
+/* =========================================================
+   ENGINE BODY
+========================================================= */
+
+.engine-body {
+    display: grid;
+
+    grid-template-columns:
+        310px
+        1fr;
+
+    gap: 22px;
+
+    align-items: center;
+}
+
+
+/* =========================================================
+   FACE SCANNER
+========================================================= */
+
+.scanner-container {
+    width: 100%;
+}
+
+.scanner {
+    position: relative;
+
+    width: 100%;
+    height: 265px;
+
+    overflow: hidden;
+
+    border-radius: 13px;
+
+    border: 1px solid rgba(25,165,255,0.6);
+
+    background-color: #061a37;
+
+    background-image:
+        linear-gradient(
+            rgba(30,140,255,0.12) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(30,140,255,0.12) 1px,
+            transparent 1px
+        );
+
+    background-size: 21px 21px;
+}
+
+
+/* scanner corners */
+
+.corner {
+    position: absolute;
+
+    width: 30px;
+    height: 30px;
+
+    z-index: 30;
+
+    border-color: #3ac5ff;
+}
+
+.corner-tl {
+    top: 12px;
+    left: 12px;
+
+    border-top: 2px solid;
+    border-left: 2px solid;
+}
+
+.corner-tr {
+    top: 12px;
+    right: 12px;
+
+    border-top: 2px solid;
+    border-right: 2px solid;
+}
+
+.corner-bl {
+    bottom: 12px;
+    left: 12px;
+
+    border-bottom: 2px solid;
+    border-left: 2px solid;
+}
+
+.corner-br {
+    bottom: 12px;
+    right: 12px;
+
+    border-bottom: 2px solid;
+    border-right: 2px solid;
+}
+
+
+/* scan line */
+
+.scan-line {
+    position: absolute;
+
+    left: 9%;
+    right: 9%;
+
+    height: 2px;
+
+    z-index: 25;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #2bdcff,
+            transparent
+        );
+
+    box-shadow:
+        0 0 15px #2bdcff;
+
+    animation:
+        scanMove 2.5s ease-in-out infinite;
+}
+
+@keyframes scanMove {
+
+    0% {
+        top: 18%;
+    }
+
+    50% {
+        top: 82%;
+    }
+
+    100% {
+        top: 18%;
+    }
+}
+
+
+/* detection label */
+
+.scanner-detected {
+    position: absolute;
+
+    top: 16px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 35;
+
+    padding: 5px 9px;
+
+    white-space: nowrap;
+
+    color: #42d2ff;
+
+    background: rgba(2,25,50,0.9);
+
+    border: 1px solid rgba(40,190,255,0.4);
+
+    border-radius: 5px;
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.scanner-text {
+    position: absolute;
+
+    bottom: 28px;
+    left: 0;
+    right: 0;
+
+    z-index: 35;
+
+    text-align: center;
+
+    color: #39c4ff;
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+}
+
+.scanner-status {
+    position: absolute;
+
+    bottom: 11px;
+    left: 0;
+    right: 0;
+
+    z-index: 35;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    color: #23dfb1;
+
+    font-size: 7px;
+    font-weight: 700;
+}
+
+.scanner-status span {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #23dfb1;
+
+    box-shadow: 0 0 8px #23dfb1;
+}
+
+
+/* =========================================================
+   ENGINE INFORMATION
+========================================================= */
+
+.engine-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.engine-info-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 4px;
+
+    color: #4ab2f5;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.info-row {
+    min-height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.info-row span {
+    color: #6984a7;
+
+    font-size: 9px;
+}
+
+.info-row strong {
+    color: white;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-align: right;
+}
+
+.info-row strong.green-text {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: #20dfb0;
+}
+
+.info-row strong.blue-text {
+    color: #3db5ff;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+
+    display: inline-block;
+
+    border-radius: 50%;
+
+    background: #20dfb0;
+
+    box-shadow: 0 0 8px #20dfb0;
+}
+
+.engine-launch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    margin-top: 16px;
+
+    min-height: 43px;
+
+    color: white;
+    text-decoration: none;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #167ed2,
+            #3159c8
+        );
+
+    font-size: 10px;
+    font-weight: 800;
+
+    transition: 0.2s ease;
+}
+
+.engine-launch:hover {
+    color: white;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+.panel-header-icon {
+    color: #4b9fe3;
+
+    font-size: 20px;
+}
+
+.action-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.operation {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-height: 64px;
+
+    padding: 9px 12px;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(55,145,245,0.28);
+
+    border-radius: 12px;
+
+    background: rgba(5,28,59,0.8);
+
+    transition: 0.2s ease;
+}
+
+.operation:hover {
+    color: white;
+
+    transform: translateX(3px);
+
+    border-color: rgba(55,170,255,0.65);
+}
+
+.operation-icon {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    font-size: 18px;
+}
+
+.blue-bg {
+    background:
+        linear-gradient(
+            145deg,
+            #2b9ff5,
+            #145dcc
+        );
+}
+
+.green-bg {
+    background:
+        linear-gradient(
+            145deg,
+            #22dfb1,
+            #008d75
+        );
+}
+
+.purple-bg {
+    background:
+        linear-gradient(
+            145deg,
+            #a269ff,
+            #5426c2
+        );
+}
+
+.cyan-bg {
+    background:
+        linear-gradient(
+            145deg,
+            #25d6ff,
+            #167fc8
+        );
+}
+
+.operation-content {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.operation-content strong {
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.operation-content span {
+    margin-top: 3px;
+
+    color: #718db1;
+
+    font-size: 8px;
+}
+
+.operation-arrow {
+    color: #4eacf0;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   SYSTEM STATUS
+========================================================= */
+
+.system-section {
+    padding: 21px;
+
+    margin-bottom: 20px;
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #09264d,
+            #071a38
+        );
+
+    border: 1px solid rgba(55,145,245,0.35);
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 17px;
+}
+
+.section-heading h3 {
+    margin: 5px 0 0;
+
+    color: white;
+
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.system-live {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #21dfb0;
+
+    font-size: 8px;
+    font-weight: 800;
+}
+
+.system-live span {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #21dfb0;
+
+    box-shadow: 0 0 8px #21dfb0;
+}
+
+.system-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 12px;
+}
+
+.system-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    min-height: 68px;
+
+    padding: 11px;
+
+    border-radius: 11px;
+
+    background: rgba(4,25,53,0.7);
+
+    border: 1px solid rgba(80,145,210,0.18);
+}
+
+.system-icon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    color: #35b3ff;
+
+    background: rgba(25,130,220,0.15);
+}
+
+.purple-system {
+    color: #a76cff;
+    background: rgba(120,70,230,0.14);
+}
+
+.green-system {
+    color: #24dfb0;
+    background: rgba(20,190,145,0.14);
+}
+
+.orange-system {
+    color: #ffb63c;
+    background: rgba(220,140,20,0.14);
+}
+
+.system-card div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+}
+
+.system-card span {
+    color: #617d9e;
+
+    font-size: 7px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.system-card strong {
+    margin-top: 3px;
+
+    color: white;
+
+    font-size: 9px;
+}
+
+.system-check {
+    margin-left: auto;
+
+    color: #20dfb0;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   SECURITY
+========================================================= */
+
+.security-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 76px;
+
+    padding: 15px 19px;
+
+    border-radius: 15px;
+
+    border: 1px solid rgba(0,220,175,0.35);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,85,85,0.28),
+            rgba(5,40,65,0.45)
+        );
+}
+
+.security-main {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.security-icon {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            145deg,
+            #20dfb1,
+            #008f77
+        );
+}
+
+.security-main div:last-child {
+    display: flex;
+    flex-direction: column;
+}
+
+.security-main strong {
+    color: #20dfb0;
+
+    font-size: 11px;
+}
+
+.security-main span {
+    margin-top: 4px;
+
+    color: #6e8fa7;
+
+    font-size: 8px;
+}
+
+.security-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 7px 10px;
+
+    color: #20dfb0;
+
+    border: 1px solid rgba(0,220,175,0.3);
+
+    border-radius: 15px;
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1350px) {
+
+    .hero-face-scanner {
+        right: 285px;
+    }
+
+    .ai-button {
+        width: 260px;
+    }
+
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 1000px) {
+
+    .hero-face-scanner {
+        display: none;
+    }
+
+    .hero-action {
+        position: relative;
+
+        right: auto;
+        top: auto;
+
+        margin-top: 22px;
+    }
+
+    .engine-body {
+        grid-template-columns: 1fr;
+    }
+
+    .system-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .hero-panel {
+        padding: 25px;
+    }
+
+    .hero-content h1 {
+        font-size: 30px;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .system-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+        gap: 10px;
+        flex-direction: column;
+    }
+
+    .security-strip {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .security-badge {
+        align-self: flex-start;
+    }
+
+}
+
+
+/* Warm welcome panel: the dashboard remains data-driven while using the new palette. */
+.hero-panel { border:1px solid #f2d4bf!important; border-radius:22px!important; background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.85),transparent 32%),linear-gradient(120deg,#fff0e4 0%,#fff8f1 54%,#fff 100%)!important; box-shadow:0 16px 40px rgba(117,67,32,.08)!important; }
+.hero-panel::before { background-image:linear-gradient(rgba(223,112,55,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(223,112,55,.045) 1px,transparent 1px)!important; }
+.hero-content h1,.hero-content h1 span { color:#33271f!important; }
+.hero-content h1 span { color:#d7652c!important; }
+.hero-content p,.hero-meta span { color:#78695f!important; }
+.eyebrow { color:#bd5927!important; }
+.live-dot { background:#e87532!important; box-shadow:0 0 12px rgba(232,117,50,.4)!important; }
+.hero-meta i { color:#df7135!important; }
+.hero-ring { border-color:rgba(221,111,54,.2)!important; }
+.hero-ring.ring-two { border-color:rgba(221,111,54,.27)!important; }
+.hero-ring.ring-three { border-color:rgba(221,111,54,.38)!important; }
+.metric-card,.dashboard-card,.system-section,.security-strip { border-color:#efe5dc!important; box-shadow:0 10px 30px rgba(74,46,25,.045)!important; }
+.metric-card,.panel { background:linear-gradient(145deg,#fff,#fffaf6)!important; border:1px solid #efe2d6!important; box-shadow:0 10px 28px rgba(74,46,25,.055)!important; }
+.metric-card.green-card,.metric-card.purple-card,.metric-card.orange-card { border-color:#efe2d6!important; }
+.metric-icon.blue,.metric-icon.orange { background:linear-gradient(145deg,#f59a5b,#d9632b)!important; color:#fff!important; box-shadow:0 8px 18px rgba(220,96,40,.18)!important; }
+.metric-icon.green { background:linear-gradient(145deg,#83bd8b,#4f9460)!important; }
+.metric-icon.purple { background:linear-gradient(145deg,#df9c73,#bd6940)!important; }
+.metric-status,.metric-label,.panel-kicker { color:#c46737!important; }
+.green-status { color:#4b9660!important; }.purple-status,.orange-status { color:#ad6944!important; }
+.metric-value,.panel h3,.section-heading h3 { color:#302720!important; }
+.metric-note,.panel-description { color:#8b7d71!important; }
+.engine-status { color:#4b8759!important; border-color:#d7eadb!important; background:#f5fbf5!important; }
+.engine-status span { background:#62aa70!important; box-shadow:0 0 8px rgba(98,170,112,.4)!important; }
+.system-section { background:#fff!important; border:1px solid #efe2d6!important; }
+.security-strip { background:linear-gradient(110deg,#fff1e5,#fffaf5)!important; border:1px solid #f0dccb!important; }
+
+/* Finish the dashboard palette: warm orange accents, ivory surfaces, and clear status greens. */
+.hero-person-icon {
+    display: grid;
+    width: 144px;
+    height: 144px;
+    place-items: center;
+    border: 1px solid #f1d2bd;
+    border-radius: 30px;
+    color: #d96b31;
+    background: linear-gradient(145deg, #fffaf6, #ffeadb);
+    box-shadow: 0 16px 34px rgba(190,83,34,.12);
+    font-size: 86px;
+    animation: subjectPulse 3.2s ease-in-out infinite;
+}
+@keyframes subjectPulse {
+    0%,100% { transform: translateY(0); box-shadow: 0 16px 34px rgba(190,83,34,.12); }
+    50% { transform: translateY(-4px); box-shadow: 0 20px 38px rgba(190,83,34,.18); }
+}
+.ai-button {
+    color: #fff;
+    background: linear-gradient(135deg, #ee9555, #d65d27);
+    box-shadow: 0 14px 30px rgba(190,83,34,.2);
+}
+.ai-button:hover { color: #fff; background: linear-gradient(135deg, #e9823d, #bf4f1c); }
+.metric-card { background: linear-gradient(145deg, #fff, #fffaf6); }
+.metric-value { color: #302720; }
+.metric-note { color: #8b7d71; }
+.metric-status,.metric-label { color: #c46737; }
+.metric-icon.blue {
+    color: #fff;
+    background: linear-gradient(145deg, #f59a5b, #d9632b);
+    box-shadow: 0 8px 18px rgba(220,96,40,.18);
+}
+.metric-icon.purple { background: linear-gradient(145deg, #df9c73, #bd6940); }
+.purple-status,.orange-status { color: #ad6944; }
+.panel-header-icon { color: #df7135; }
+.scanner {
+    border-color: #e9cbb7;
+    background-color: #2d2925;
+    background-image:
+        linear-gradient(rgba(232,117,50,.11) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,117,50,.11) 1px, transparent 1px);
+}
+.corner { border-color: #d96b31; }
+.scanner-symbol {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 12;
+    display: grid;
+    width: 118px;
+    height: 130px;
+    place-items: center;
+    transform: translate(-50%, -53%);
+    color: #df874e;
+}
+.scanner-symbol i {
+    font-size: 92px;
+    line-height: 1;
+    text-shadow: 0 0 24px rgba(232,117,50,.24);
+}
+.scan-line {
+    background: linear-gradient(90deg, transparent, #e87532, transparent);
+    box-shadow: 0 0 14px rgba(232,117,50,.55);
+}
+.scanner-detected {
+    color: #a94d20;
+    background: rgba(255,248,241,.94);
+    border-color: #e9c1a5;
+}
+.scanner-text { color: #f0d3bd; }
+.engine-info-title { color: #c46737; }
+.info-row { border-color: #f1e9e2; }
+.info-row span { color: #918277; }
+.info-row strong { color: #41352c; }
+.info-row strong.blue-text { color: #bf5b2c; }
+.engine-launch {
+    color: #fff;
+    background: linear-gradient(135deg, #ed8b49, #d65d27);
+}
+.engine-launch:hover { color: #fff; background: #bf4f1c; }
+.operation {
+    color: #3a2e26;
+    border-color: #efe2d6;
+    background: #fffaf6;
+}
+.operation:hover {
+    color: #302720;
+    border-color: #edc6ad;
+    background: #fff3e9;
+}
+.blue-bg,.green-bg,.purple-bg,.cyan-bg { background: linear-gradient(145deg, #f59a5b, #d9632b); }
+.operation-icon { color: #fff; }
+.operation-content span { color: #8b7d71; }
+.operation-arrow { color: #d96b31; }
+.system-section { background: linear-gradient(145deg, #fff, #fffaf6); }
+.system-card { background: #fffaf6; border-color: #efe2d6; }
+.system-icon { color: #d96b31; background: #fff0e4; }
+.purple-system,.orange-system { color: #d96b31; background: #fff0e4; }
+.system-card span { color: #918277; }
+.system-card strong { color: #41352c; }
+.system-check { color: #4b9660; }
+.security-icon { background: linear-gradient(145deg, #ee9555, #d65d27); }
+.security-main strong,.security-badge { color: #4b8759; }
+.security-main span { color: #8b7d71; }
+.security-badge { border-color: #d7eadb; background: #f5fbf5; }
+</style>
+
+
+<div class="dashboard">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="hero-panel">
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+                <span class="live-dot"></span>
+                SYSTEM LIVE · REAL-TIME MONITORING
+            </div>
+
+
+            <h1>
+                Child Reunification
+                <span>Intelligence Center</span>
+            </h1>
+
+
+            <p>
+                Centralized case monitoring and AI-assisted facial
+                matching designed to help reconnect missing children
+                with their families.
+            </p>
+
+
+            <div class="hero-meta">
+
+                <span>
+                    <i class="bi bi-shield-check"></i>
+                    Secure Environment
+                </span>
+
+                <span>
+                    <i class="bi bi-database-check"></i>
+                    Database Connected
+                </span>
+
+                <span>
+                    <i class="bi bi-cpu"></i>
+                    AI Engine Ready
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- HERO FACE -->
+
+        <div class="hero-face-scanner">
+            <i class="bi bi-person-bounding-box hero-person-icon" aria-hidden="true"></i>
+
+        </div>
+
+
+        <!-- AI BUTTON -->
+
+        <div class="hero-action">
+
+            <a
+                href="/ai_match"
+                class="ai-button"
+            >
+
+                <div class="ai-icon">
+                    <i class="bi bi-cpu-fill"></i>
+                </div>
+
+                <div class="ai-button-text">
+
+                    <strong>
+                        Launch AI Matching
+                    </strong>
+
+                    <small>
+                        Analyze registered cases
+                    </small>
+
+                </div>
+
+                <div class="arrow-icon">
+                    <i class="bi bi-arrow-up-right"></i>
+                </div>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <section class="metrics-grid">
+
+
+        <div class="metric-card blue-card">
+
+            <div class="metric-top">
+
+                <div class="metric-icon blue">
+                    <i class="bi bi-person-x-fill"></i>
+                </div>
+
+                <span class="metric-status">
+                    <i class="bi bi-arrow-up"></i>
+                    ACTIVE
+                </span>
+
+            </div>
+
+            <div class="metric-label">
+                MISSING CASES
+            </div>
+
+            <div class="metric-value">
+                {{ missing|default(0) }}
+            </div>
+
+            <div class="metric-note">
+                <i class="bi bi-folder2-open"></i>
+                Registered records
+            </div>
+
+        </div>
+
+
+        <div class="metric-card green-card">
+
+            <div class="metric-top">
+
+                <div class="metric-icon green">
+                    <i class="bi bi-person-check-fill"></i>
+                </div>
+
+                <span class="metric-status green-status">
+                    ACTIVE
+                </span>
+
+            </div>
+
+            <div class="metric-label">
+                FOUND CASES
+            </div>
+
+            <div class="metric-value">
+                {{ found|default(0) }}
+            </div>
+
+            <div class="metric-note">
+                <i class="bi bi-clock"></i>
+                Awaiting processing
+            </div>
+
+        </div>
+
+
+        <div class="metric-card purple-card">
+
+            <div class="metric-top">
+
+                <div class="metric-icon purple">
+                    <i class="bi bi-diagram-3-fill"></i>
+                </div>
+
+                <span class="metric-status purple-status">
+                    AI
+                </span>
+
+            </div>
+
+            <div class="metric-label">
+                AI MATCHES
+            </div>
+
+            <div class="metric-value">
+                {{ matches|default(0) }}
+            </div>
+
+            <div class="metric-note">
+                <i class="bi bi-stars"></i>
+                Candidate relationships
+            </div>
+
+        </div>
+
+
+        <div class="metric-card orange-card">
+
+            <div class="metric-top">
+
+                <div class="metric-icon orange">
+                    <i class="bi bi-hourglass-split"></i>
+                </div>
+
+                <span class="metric-status orange-status">
+                    REVIEW
+                </span>
+
+            </div>
+
+            <div class="metric-label">
+                PENDING REVIEW
+            </div>
+
+            <div class="metric-value">
+                {{ pending|default(0) }}
+            </div>
+
+            <div class="metric-note">
+                <i class="bi bi-person-check"></i>
+                Require verification
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MAIN DASHBOARD
+    ====================================================== -->
+
+    <section class="dashboard-grid">
+
+
+        <!-- AI ENGINE -->
+
+        <div class="panel ai-engine">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <div class="panel-kicker">
+                        ARTIFICIAL INTELLIGENCE
+                    </div>
+
+                    <h3>
+                        Face Matching Engine
+                    </h3>
+
+                    <p class="panel-description">
+                        Real-time facial feature analysis and
+                        embedding comparison.
+                    </p>
+
+                </div>
+
+
+                <div class="engine-status">
+
+                    <span></span>
+                    ONLINE
+
+                </div>
+
+            </div>
+
+
+            <div class="engine-body">
+
+
+                <!-- SCANNER -->
+
+                <div class="scanner-container">
+
+                    <div class="scanner">
+
+
+                        <div class="corner corner-tl"></div>
+                        <div class="corner corner-tr"></div>
+                        <div class="corner corner-bl"></div>
+                        <div class="corner corner-br"></div>
+
+
+                        <div class="scanner-detected">
+                            FACE DETECTED · ANALYZING
+                        </div>
+
+
+                        <div class="scanner-symbol" aria-hidden="true">
+                            <i class="bi bi-person-bounding-box"></i>
+                        </div>
+
+
+                        <div class="scan-line"></div>
+
+
+                        <div class="scanner-text">
+                            FACE EMBEDDING ENGINE
+                        </div>
+
+
+                        <div class="scanner-status">
+
+                            <span></span>
+
+                            READY FOR ANALYSIS
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ENGINE INFORMATION -->
+
+                <div class="engine-info">
+
+                    <div class="engine-info-title">
+
+                        <i class="bi bi-activity"></i>
+
+                        Engine Status
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Recognition Engine
+                        </span>
+
+                        <strong>
+                            InsightFace
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Analysis Mode
+                        </span>
+
+                        <strong>
+                            Embedding Comparison
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Processing Status
+                        </span>
+
+                        <strong class="green-text">
+
+                            <span class="status-dot"></span>
+
+                            Ready
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>
+                            Human Verification
+                        </span>
+
+                        <strong class="blue-text">
+                            Required
+                        </strong>
+
+                    </div>
+
+
+                    <a
+                        href="/ai_match"
+                        class="engine-launch"
+                    >
+
+                        Start Analysis
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="panel operations-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <div class="panel-kicker">
+                        OPERATIONS
+                    </div>
+
+                    <h3>
+                        Quick Actions
+                    </h3>
+
+                    <p class="panel-description">
+                        Manage reunification cases.
+                    </p>
+
+                </div>
+
+                <i class="bi bi-grid-3x3-gap panel-header-icon"></i>
+
+            </div>
+
+
+            <div class="action-list">
+
+
+                <a
+                    href="/register-missing"
+                    class="operation"
+                >
+
+                    <div class="operation-icon blue-bg">
+
+                        <i class="bi bi-person-plus-fill"></i>
+
+                    </div>
+
+                    <div class="operation-content">
+
+                        <strong>
+                            Register Missing Child
+                        </strong>
+
+                        <span>
+                            Create a new missing case
+                        </span>
+
+                    </div>
+
+                    <div class="operation-arrow">
+                        <i class="bi bi-arrow-up-right"></i>
+                    </div>
+
+                </a>
+
+
+                <a
+                    href="/register_found"
+                    class="operation"
+                >
+
+                    <div class="operation-icon green-bg">
+
+                        <i class="bi bi-person-check-fill"></i>
+
+                    </div>
+
+                    <div class="operation-content">
+
+                        <strong>
+                            Register Found Child
+                        </strong>
+
+                        <span>
+                            Add a recovered case
+                        </span>
+
+                    </div>
+
+                    <div class="operation-arrow">
+                        <i class="bi bi-arrow-up-right"></i>
+                    </div>
+
+                </a>
+
+
+                <a
+                    href="/match-history"
+                    class="operation"
+                >
+
+                    <div class="operation-icon purple-bg">
+
+                        <i class="bi bi-clock-history"></i>
+
+                    </div>
+
+                    <div class="operation-content">
+
+                        <strong>
+                            Match History
+                        </strong>
+
+                        <span>
+                            Review AI candidates
+                        </span>
+
+                    </div>
+
+                    <div class="operation-arrow">
+                        <i class="bi bi-arrow-up-right"></i>
+                    </div>
+
+                </a>
+
+
+                <a
+                    href="/ai_match"
+                    class="operation"
+                >
+
+                    <div class="operation-icon cyan-bg">
+
+                        <i class="bi bi-stars"></i>
+
+                    </div>
+
+                    <div class="operation-content">
+
+                        <strong>
+                            AI Matching
+                        </strong>
+
+                        <span>
+                            Find potential matches
+                        </span>
+
+                    </div>
+
+                    <div class="operation-arrow">
+                        <i class="bi bi-arrow-up-right"></i>
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SYSTEM OVERVIEW
+    ====================================================== -->
+
+    <section class="system-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <div class="panel-kicker">
+                    SYSTEM OVERVIEW
+                </div>
+
+                <h3>
+                    Platform Status
+                </h3>
+
+            </div>
+
+
+            <span class="system-live">
+
+                <span></span>
+
+                ALL SYSTEMS OPERATIONAL
+
+            </span>
+
+        </div>
+
+
+        <div class="system-grid">
+
+
+            <div class="system-card">
+
+                <div class="system-icon">
+
+                    <i class="bi bi-database-check"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        DATABASE
+                    </span>
+
+                    <strong>
+                        CONNECTED
+                    </strong>
+
+                </div>
+
+                <i class="bi bi-check-circle-fill system-check"></i>
+
+            </div>
+
+
+            <div class="system-card">
+
+                <div class="system-icon purple-system">
+
+                    <i class="bi bi-cpu-fill"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        AI ENGINE
+                    </span>
+
+                    <strong>
+                        READY
+                    </strong>
+
+                </div>
+
+                <i class="bi bi-check-circle-fill system-check"></i>
+
+            </div>
+
+
+            <div class="system-card">
+
+                <div class="system-icon green-system">
+
+                    <i class="bi bi-shield-check"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        SECURITY
+                    </span>
+
+                    <strong>
+                        PROTECTED
+                    </strong>
+
+                </div>
+
+                <i class="bi bi-check-circle-fill system-check"></i>
+
+            </div>
+
+
+            <div class="system-card">
+
+                <div class="system-icon orange-system">
+
+                    <i class="bi bi-person-check"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        VERIFICATION
+                    </span>
+
+                    <strong>
+                        ENABLED
+                    </strong>
+
+                </div>
+
+                <i class="bi bi-check-circle-fill system-check"></i>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SECURITY
+    ====================================================== -->
+
+    <section class="security-strip">
+
+        <div class="security-main">
+
+            <div class="security-icon">
+
+                <i class="bi bi-shield-lock-fill"></i>
+
+            </div>
+
+            <div>
+
+                <strong>
+                    Protected Case Environment
+                </strong>
+
+                <span>
+                    AI results are suggestions only and require
+                    authorized human verification before confirmation.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="security-badge">
+
+            <i class="bi bi-lock-fill"></i>
+
+            SECURE
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

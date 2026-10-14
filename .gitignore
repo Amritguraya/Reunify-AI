@@ -1,0 +1,60 @@
+__pycache__/
+.venv/
+*.py[cod]
+.env
+.env.*
+!.env.example
+*.env
+
+# Local editor/workspace configuration
+.vscode/
+
+# Local credentials and signing material
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local caches, test output, and build artifacts
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Temporary and backup files
+backup/
+*.bak
+*.backup
+*.old
+*.tmp
+
+# Operating system metadata
+.DS_Store
+Thumbs.db
+
+database.db
+*.db
+*.db-wal
+*.db-shm
+*.db-journal
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite-journal
+*.sqlite3-wal
+*.sqlite3-shm
+*.sqlite3-journal
+instance/
+static/uploads/
+/uploads/
+backups/
+reunify-backup-*.zip
+reunify-backup-*.zip.tmp
+reunify-db-*.sqlite3
+*.log

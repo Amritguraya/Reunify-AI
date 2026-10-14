@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Found Child Report #{{ child['id'] }} | REUNIFY AI{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/operations.css', v='20261014-bg') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page operations-page case-detail-page">
+    <header class="page-header">
+        <div>
+            <div class="eyebrow">PUBLIC FOUND-CHILD REPORT</div>
+            <h1 class="page-title">Found Child · Case #{{ child['id'] }}</h1>
+            <p class="page-description">Review the report and contact its submitter. This public search path works alongside AI face matching.</p>
+        </div>
+        <a href="{{ url_for('public_directory.found_children') }}" class="btn-main"><i class="bi bi-arrow-left"></i> All found reports</a>
+    </header>
+
+    <section class="case-detail-card">
+        <div class="case-detail-overview">
+            <div class="case-detail-photo">
+                {% if child['photo_path'] %}
+                <img src="{{ url_for('static', filename=child['photo_path'].replace('static/', '')) }}" alt="Photo for found-child report {{ child['id'] }}">
+                {% else %}<i class="bi bi-person-fill" aria-hidden="true"></i>{% endif %}
+            </div>
+            <div class="case-detail-summary">
+                <span class="case-detail-kicker">PUBLIC IDENTIFICATION PROFILE</span>
+                <h2>Found child report #{{ child['id'] }}</h2>
+                <p>Compare these identification details with a missing-child case. If you recognize the child, contact the person who submitted this report.</p>
+                <div class="case-detail-tags">
+                    <span><i class="bi bi-calendar-event"></i> Found {{ child['found_date'] or 'date not provided' }}</span>
+                    <span><i class="bi bi-geo-alt"></i> {{ child['location_found'] or 'Location not provided' }}</span>
+                </div>
+            </div>
+            {% if child['has_verified_match'] %}
+            <span class="case-record-state"><i class="bi bi-shield-check"></i> Verified match</span>
+            {% else %}
+            <span class="case-record-state"><i class="bi bi-person-check"></i> {{ child['status'] or 'Reported' }}</span>
+            {% endif %}
+        </div>
+
+        <div class="case-detail-section">
+            <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-person-vcard"></i></span><div><h3>Child and location information</h3><p>Details from the found-child report</p></div></div>
+            <div class="case-info-grid">
+                <div class="case-info-item"><span>Estimated age</span><strong>{% if child['estimated_age'] is not none %}{{ child['estimated_age'] }} years{% else %}Not provided{% endif %}</strong></div>
+                <div class="case-info-item"><span>Gender</span><strong>{{ child['gender'] or 'Not provided' }}</strong></div>
+                <div class="case-info-item"><span>Location found</span><strong>{{ child['location_found'] or 'Not provided' }}</strong></div>
+                <div class="case-info-item"><span>Country</span><strong>{{ child['country'] or 'Not provided' }}</strong></div>
+                <div class="case-info-item"><span>Date found</span><strong>{{ child['found_date'] or 'Not provided' }}</strong></div>
+                <div class="case-info-item"><span>Report status</span><strong>{% if child['has_verified_match'] %}Verified match{% else %}{{ child['status'] or 'Reported' }}{% endif %}</strong></div>
+            </div>
+        </div>
+
+        <div class="case-detail-section">
+            <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-card-text"></i></span><div><h3>Report details</h3><p>Observations shared by the person who found the child</p></div></div>
+            <div class="case-description-box">{{ child['description'] or 'No additional description was provided.' }}</div>
+        </div>
+
+        <div class="case-detail-section">
+            <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-telephone"></i></span><div><h3>Contact the report submitter</h3><p>Use this contact information to share relevant information about the case</p></div></div>
+            <div class="case-info-grid">
+                <div class="case-info-item"><span>Reporter name</span><strong>{{ child['reporter_name'] or 'Not provided' }}</strong></div>
+                <div class="case-info-item"><span>Reporter contact</span><strong>{% if child['reporter_contact'] %}<a href="tel:{{ child['reporter_contact'] }}">{{ child['reporter_contact'] }}</a>{% else %}Not provided{% endif %}</strong></div>
+            </div>
+        </div>
+
+        {% if potential_matches %}
+        <div class="case-detail-section">
+            <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-stars"></i></span><div><h3>Possible missing-child leads</h3><p>AI-suggested records to compare with this found-child report</p></div></div>
+            <p class="small text-secondary">These are unverified screening leads. Compare the photographs and case details before treating any as an identification.</p>
+            <div class="related-match-list">
+                {% for match in potential_matches %}
+                <article class="related-match-card">
+                    <div class="related-match-identity">
+                        {% if match['photo_path'] %}<a class="related-match-photo" href="{{ url_for('public_directory.missing_child', child_id=match['id']) }}"><img src="{{ url_for('static', filename=match['photo_path'].replace('static/', '')) }}" alt="Photo of {{ match['name'] }}"></a>{% endif %}
+                        <div><a class="related-match-name" href="{{ url_for('public_directory.missing_child', child_id=match['id']) }}">{{ match['name'] }}</a><span>Case #{{ match['id'] }} · Age {{ match['age'] if match['age'] is not none else 'not provided' }} · {{ match['city'] }} · Missing {{ match['missing_date'] }}</span></div>
+                    </div>
+                    <div class="related-match-status">
+                        <strong>{{ "%.1f"|format((match['confidence'] or 0) * 100) }}% face similarity</strong>
+                        {% if match['match_type'] == 'cross_age' %}<span class="small fw-semibold" style="color:#bd6a00;">Cross-age · about {{ match['age_gap_years'] }} years apart</span>{% endif %}
+                    </div>
+                    <a class="related-match-action" href="{{ url_for('public_directory.missing_child', child_id=match['id']) }}">Compare missing case <i class="bi bi-arrow-up-right"></i></a>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if verified_matches %}
+        <div class="case-detail-section">
+            <div class="case-detail-section-heading"><span class="case-detail-section-icon"><i class="bi bi-shield-check"></i></span><div><h3>Verified missing-child match</h3><p>Public missing-child case linked by the staff-verified match</p></div></div>
+            <div class="related-match-list">
+                {% for match in verified_matches %}
+                <article class="related-match-card">
+                    <div class="related-match-identity">
+                        {% if match['photo_path'] %}<a class="related-match-photo" href="{{ url_for('public_directory.missing_child', child_id=match['id']) }}"><img src="{{ url_for('static', filename=match['photo_path'].replace('static/', '')) }}" alt="Photo of {{ match['name'] }}"></a>{% endif %}
+                        <div><a class="related-match-name" href="{{ url_for('public_directory.missing_child', child_id=match['id']) }}">{{ match['name'] }}</a><span>Case #{{ match['id'] }} · {{ match['city'] }} · Missing {{ match['missing_date'] }}</span></div>
+                    </div>
+                    <a class="related-match-action" href="{{ url_for('public_directory.missing_child', child_id=match['id']) }}">View missing case <i class="bi bi-arrow-up-right"></i></a>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </section>
+
+    <div class="d-flex gap-2 flex-wrap">
+        <a class="btn-main" href="{{ url_for('public_directory.found_children') }}">Back to found reports</a>
+    </div>
+</div>
+{% endblock %}

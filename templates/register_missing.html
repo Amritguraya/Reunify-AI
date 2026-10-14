@@ -1,0 +1,697 @@
+{% extends "base.html" %}
+
+{% block title %}Register Missing Child | REUNIFY AI{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/registration.css', v='20261014-bg') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page registration-page">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <div>
+            <div class="eyebrow">
+                Case Management
+            </div>
+
+            <h1 class="page-title">
+                Register Missing Child
+            </h1>
+
+            <p class="page-description">
+                Create a secure missing-child case for identification and reunification.
+            </p>
+        </div>
+    </div>
+
+
+    <!-- ERROR SUMMARY -->
+
+    <div
+        id="formErrors"
+        class="validation-summary"
+        style="display:none;"
+    >
+        <div class="validation-title">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            Please correct the following:
+        </div>
+
+        <ul id="errorList"></ul>
+    </div>
+
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+        autocomplete="off"
+        id="missingChildForm"
+        novalidate
+    >
+
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+            <label for="missingCompanyWebsite">Leave this field empty</label>
+            <input id="missingCompanyWebsite" type="text" name="company_website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="row g-4">
+
+
+            <!-- =====================================================
+                 CHILD INFORMATION
+            ====================================================== -->
+
+            <div class="col-lg-8">
+
+                <div class="panel case-card case-card-profile">
+
+                    <h5 class="fw-bold mb-4">
+                        <i class="bi bi-person-vcard me-2 text-primary"></i>
+                        Child Information
+                    </h5>
+
+
+                    <div class="row g-4">
+
+
+                        <!-- NAME -->
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Child Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="name"
+                                id="childName"
+                                class="form-control"
+                                placeholder="Enter child's full name"
+                                autocomplete="off"
+                                maxlength="100"
+                                required
+                            >
+
+                            <div class="field-error" id="nameError"></div>
+
+                        </div>
+
+
+                        <!-- AGE -->
+
+                        <div class="col-md-3">
+
+                            <label class="form-label">
+                                Age
+                            </label>
+
+                            <input
+                                type="number"
+                                name="age"
+                                id="age"
+                                class="form-control"
+                                min="0"
+                                max="99"
+                                step="1"
+                                placeholder="Age"
+                                required
+                            >
+
+                            <div class="field-error" id="ageError"></div>
+
+                        </div>
+
+
+                        <!-- GENDER -->
+
+                        <div class="col-md-3">
+
+                            <label class="form-label">
+                                Gender
+                            </label>
+
+                            <div class="select-wrapper">
+
+                                <select
+                                    name="gender"
+                                    id="gender"
+                                    class="form-select"
+                                    required
+                                >
+
+                                    <option value="" selected disabled>
+                                        Select gender
+                                    </option>
+
+                                    <option value="Male">
+                                        Male
+                                    </option>
+
+                                    <option value="Female">
+                                        Female
+                                    </option>
+
+                                    <option value="Other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+                                <i class="bi bi-chevron-down select-arrow"></i>
+
+                            </div>
+
+                            <div class="field-error" id="genderError"></div>
+
+                        </div>
+
+
+                        <!-- CITY -->
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                City
+                            </label>
+
+                            <input
+                                type="text"
+                                name="city"
+                                id="city"
+                                class="form-control"
+                                placeholder="City where child went missing"
+                                maxlength="100"
+                                required
+                            >
+
+                            <div class="field-error" id="cityError"></div>
+
+                        </div>
+
+
+                        <!-- PARENT -->
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Parent / Guardian Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="parent_name"
+                                id="parentName"
+                                class="form-control"
+                                placeholder="Parent or guardian"
+                                maxlength="100"
+                                required
+                            >
+
+                            <div class="field-error" id="parentError"></div>
+
+                        </div>
+
+
+                        <!-- COUNTRY CODE -->
+
+                        <div class="col-md-4">
+
+                            <label class="form-label">
+                                Country Code
+                            </label>
+
+                            <div class="select-wrapper">
+
+                                <select
+                                    name="country_code"
+                                    id="countryCode"
+                                    class="form-select"
+                                    required
+                                >
+
+                                    <option value="+91" selected>
+                                        🇮🇳 +91 India
+                                    </option>
+
+                                    <option value="+1">
+                                        🇺🇸 +1 USA
+                                    </option>
+
+                                    <option value="+44">
+                                        🇬🇧 +44 UK
+                                    </option>
+
+                                    <option value="+61">
+                                        🇦🇺 +61 Australia
+                                    </option>
+
+                                    <option value="+971">
+                                        🇦🇪 +971 UAE
+                                    </option>
+
+                                </select>
+
+                                <i class="bi bi-chevron-down select-arrow"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PHONE -->
+
+                        <div class="col-md-8">
+
+                            <label class="form-label">
+                                Contact Number
+                            </label>
+
+                            <input
+                                type="tel"
+                                name="phone"
+                                id="phone"
+                                class="form-control"
+                                placeholder="Mobile number"
+                                inputmode="numeric"
+                                maxlength="15"
+                                required
+                            >
+
+                            <div class="field-error" id="phoneError"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 PHOTO
+            ====================================================== -->
+
+            <div class="col-lg-4">
+
+                <div class="panel photo-panel case-card case-card-photo">
+
+                    <h5 class="fw-bold mb-4">
+                        <i class="bi bi-camera me-2 text-primary"></i>
+                        Identification Photo
+                    </h5>
+
+
+                    <label class="form-label">
+                        Child Photograph
+                    </label>
+
+
+                    <input
+                        type="file"
+                        name="photo"
+                        id="missingPhoto"
+                        class="form-control"
+                        accept="image/jpeg,image/png,image/webp"
+                        required
+                    >
+
+
+                    <div
+                        id="photoPreview"
+                        class="photo-preview mt-3"
+                    >
+
+                        <i class="bi bi-image"></i>
+
+                        <span>
+                            Photo preview will appear here
+                        </span>
+
+                    </div>
+
+
+                    <div class="field-error" id="photoError"></div>
+
+
+                    <small class="text-secondary d-block mt-3">
+
+                        Use a clear, front-facing photograph whenever
+                        possible. This image will be used by the AI
+                        face-matching system.
+
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 MISSING DATE
+            ====================================================== -->
+
+            <div class="col-lg-12">
+
+                <div class="panel case-card case-card-date">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-calendar-event me-2 text-primary"></i>
+
+                        Missing Date
+
+                    </h5>
+
+
+                    <div class="row g-3">
+
+
+                        <!-- DAY -->
+
+                        <div class="col-md-4">
+
+                            <label class="form-label">
+                                Day
+                            </label>
+
+                            <div class="select-wrapper">
+
+                                <select
+                                    name="day"
+                                    id="day"
+                                    class="form-select"
+                                    required
+                                >
+
+                                    <option value="" selected disabled>
+                                        Select day
+                                    </option>
+
+                                    {% for day_number in range(1, 32) %}
+
+                                    <option value="{{ day_number }}">
+                                        {{ day_number }}
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                                <i class="bi bi-chevron-down select-arrow"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MONTH -->
+
+                        <div class="col-md-4">
+
+                            <label class="form-label">
+                                Month
+                            </label>
+
+                            <div class="select-wrapper">
+
+                                <select
+                                    name="month"
+                                    id="month"
+                                    class="form-select"
+                                    required
+                                >
+
+                                    <option value="" selected disabled>
+                                        Select month
+                                    </option>
+
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+
+                                </select>
+
+                                <i class="bi bi-chevron-down select-arrow"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- YEAR -->
+
+                        <div class="col-md-4">
+
+                            <label class="form-label">
+                                Year
+                            </label>
+
+                            <input
+                                type="number"
+                                name="year"
+                                id="year"
+                                class="form-control"
+                                min="1900"
+                                max="2100"
+                                step="1"
+                                placeholder="YYYY"
+                                required
+                            >
+
+                            <div class="field-error" id="dateError"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 SUBMIT
+            ====================================================== -->
+
+            <div class="col-12">
+
+                <div class="d-flex justify-content-end">
+
+                    <button
+                        type="submit"
+                        class="btn-main"
+                        id="submitButton"
+                    >
+
+                        <i class="bi bi-shield-plus"></i>
+
+                        Register Missing Case
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<style>
+
+/* =========================================================
+   SELECT
+   ========================================================= */
+
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.select-wrapper .form-select {
+
+    width: 100%;
+
+    padding-right: 42px;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    cursor: pointer;
+
+    background-color: #fff;
+}
+
+.select-arrow {
+
+    position: absolute;
+
+    top: 50%;
+    right: 15px;
+
+    transform: translateY(-50%);
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    pointer-events: none;
+
+    transition: transform .2s ease;
+}
+
+.select-wrapper:focus-within .select-arrow {
+
+    color: #147dff;
+
+    transform:
+        translateY(-50%)
+        rotate(180deg);
+}
+
+
+/* =========================================================
+   PHOTO PREVIEW
+   ========================================================= */
+
+.photo-preview {
+
+    min-height: 170px;
+
+    padding: 25px;
+
+    border: 1px dashed #cbd5e1;
+
+    border-radius: 14px;
+
+    background: #f8fafc;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    color: #94a3b8;
+
+    text-align: center;
+
+    overflow: hidden;
+}
+
+.photo-preview i {
+    font-size: 35px;
+}
+
+.photo-preview img {
+
+    width: 100%;
+
+    max-height: 220px;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+}
+
+
+/* =========================================================
+   VALIDATION
+   ========================================================= */
+
+.validation-summary {
+
+    margin-bottom: 25px;
+
+    padding: 17px 20px;
+
+    border-radius: 13px;
+
+    border: 1px solid #fecaca;
+
+    background: #fff5f5;
+
+    color: #991b1b;
+}
+
+.validation-title {
+
+    font-weight: 800;
+
+    font-size: 13px;
+
+    margin-bottom: 7px;
+}
+
+.validation-summary ul {
+
+    margin: 0;
+
+    padding-left: 22px;
+
+    font-size: 12px;
+}
+
+.validation-summary li {
+    margin-bottom: 3px;
+}
+
+.field-error {
+
+    min-height: 17px;
+
+    margin-top: 5px;
+
+    color: #dc2626;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+.form-control.invalid,
+.form-select.invalid {
+
+    border-color: #ef4444 !important;
+
+    box-shadow:
+        0 0 0 3px rgba(239,68,68,.08) !important;
+}
+
+.form-control.valid,
+.form-select.valid {
+
+    border-color: #22c55e !important;
+}
+
+</style>
+
+
+<script src="{{ url_for('static', filename='js/register-missing.js') }}" defer></script>
+
+{% endblock %}
